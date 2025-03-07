@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <form method="POST">
+     
+            {% csrf_token %}
+            {{cat_form.as_p}}
+            <button type="submit" class= "bg-black text-white p-2 w-150 rounded-md m-5">Submit</button>
+        </form>
+
+
+    </div>
+    
+</body>
+</html>

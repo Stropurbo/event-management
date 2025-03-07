@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+
+<body class = 'm-8 bg-zinc-100'>
+
+    <header class="p-2">
+        <div class="flex justify-between font-semibold">
+        <div class = "font-bold p-2 text-xl rounded-xl">
+           All Category
+        </div>
+        <div>
+            <a href="{% url "category_form" %}" class="p-2 bg-green-500 rounded-xl text-xl">Create Category</a>
+            <a href="{% url "dashboard" %}" class="p-2 bg-green-500 rounded-xl text-xl">Dashboard</a>
+        </div>
+        
+    </div>
+    </header>
+
+   <main>   
+
+    
+    
+        <form method="POST" action="{% url "delete_cat" %}">
+            {% csrf_token %}
+    
+            {% for allcat in cat %}
+                
+            <div class="flex items-center space-x-3 p-2">
+                <input type="checkbox" class="size-6" name="category" value="{{allcat.id}}">
+                <label class="text-xl font-semibold">{{allcat.name}}</label>
+            </div> 
+    
+            {% endfor %}
+            
+            <button type="submit" class="bg-green-500 rounded-xl p-2 text-black">Delete</button>
+
+        </form>   
+              
+    </main>
+
+    
+
+</body>
+</html>
