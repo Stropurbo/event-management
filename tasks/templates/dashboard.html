@@ -12,19 +12,17 @@
 <body class = "m-8 bg-zinc-100">
 
     <header>
-        
+
         <div class= "flex justify-between">
             <div>
                  <a href="{% url "dashboard" %}" class = "font-bold p-2 text-xl">
                 Dashboard
             </a>
-            <a href="{% url "home" %}" class = "font-bold p-2 text-xl">
+            <a href="{% url "home" %}" class = "font-bold p-2 text-xl text-green-500">
                 Home
             </a>
-            </div>
-           
+            </div>         
             
-
             <div class = "flex items-center gap-3">
                 
                 <a href="{% url "create_event" %}" class="createevent p-2 bg-green-500 text-black rounded-lg">Create Event</a>
@@ -55,7 +53,7 @@
     
     <main>
 
-        <div class = "mt-8 grid grid-cols-4 gap-4">
+        <div class = "mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 
             <div class="totalevent flex items-center justify-between bg-white p-5 rounded-xl shadow-sm">
                 <div>
@@ -129,19 +127,19 @@
         </div>
 
 
-        <div class="bg-white w-full p-5 mt-5  rounded-xl">        
+        <div class="bg-white w-full p-5 mt-5 rounded-xl">        
                
-                <ol class="list-decimal">
+                <ol class="list-decimal space-y-4">
                     {% for event in events %}
-                    <div class="flex justify-between items-center">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-3">
 
                     <div class="mx-5">
-                        <li>{{event.name}} - {{event.date}} - {{event.location}}</li>
+                        <li class="font-medium">{{event.name}} - {{event.date}} - {{event.location}}</li>
                     </div>
                     
-                    <div class="m-2 flex gap-2">
+                    <div class="m-2 flex gap-2 flex-wrap">
                         <a href="{% url 'update_event' event.id %}" 
-                        class="createevent bg-green-500 rounded-xl p-2 text-black"
+                        class="createevent bg-green-500 rounded-lg text-sm p-2 text-black "
                         >Edit</a>
 
                         <form action="{% url 'delete_event' event.id %}" method="POST">
@@ -160,48 +158,58 @@
                 </div>
         </div>
     
+
+        
         <div class="mt-8 bg-white p-5 shadow-lg rounded-xl">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4 ">Participants List</h3>
-            
-            <table class="w-full border-collapse border-gray-400">
-                <thead>
-                    <tr class="bg-gray-300">
-                        <th class="border p-2">Name</th>
-                        <th class="border p-2">E-mail</th>
-                        <th class="border p-2">Events</th>
-                        <th class="border p-2">Participated</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for participant in participants %}
-                    <tr class="border">
-                        
-                        <td class="partiname border p-2 flex justify-between"> {{participant.name}} 
-                            <form action="{% url 'delete_participant' participant.id %}" method="POST">
-                                {% csrf_token %}
-                                <button class="del_partici">Delete</button>
-                            </form>
-                        
 
-                        </td>                                           
-                        <td class="border p-2"> {{participant.email}} </td>
-                        <td class="border p-2"> {{participant.event_count}} </td>
-                        <td class="border p-2">
-                            {% for event in participant.event.all %}                                                       
-                                    <span class="bg-blue-500 m-2 text-white px-2 py-1 rounded-md">
-                                        {{ event.name }}
-                                    </span>
-                                    
-                                {% empty %}
-                                    <span class="text-gray-500">No Events</span>                                
-                                {% endfor %}
-                        </td>
-                    </tr>                   
-                    
+            <div class="overflow-x-auto">
+                
+                <table class="w-full border-collapse border border-gray-400 text-xs sm:text-sm">  
+                    <thead>
+                        <tr class="bg-gray-300 ">
+                            <th class="border p-2 sm:p-3">Name</th>
+                            <th class="border p-2 sm:p-3">E-mail</th>
+                            <th class="border p-2 sm:p-3 text-center">Events</th>
+                            <th class="border p-2 sm:p-3">Participated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for participant in participants %}
+                        <tr class="border">
+                            
+                            <td class="partiname p-2 sm:p-3 flex justify-between items-center gap-2">
+                                <span class="truncate flex items-center justify-center text-center">{{participant.name}}</span>
+                                <form action="{% url 'delete_participant' participant.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="delete-participant text-gray-500 hover:bg-red-500">
+                                        Delete
+                                    </button>
+                                </form>                          
+                            </td> 
 
-                    {% endfor %}
-                </tbody>
-            </table>
+                            <td class="border p-2 sm:p-3 truncate"> {{participant.email}} </td>
+                            <td class="border p-2 sm:p-3 text-center"> {{participant.event_count}} </td>
+
+                            <td class="border p-2 sm:p-3">
+                                <div class="flex flex-wrap gap-1">
+                                {% for event in participant.event.all %}                                                       
+                                        <span class="bg-blue-500 text-white p-2 m-2 rounded-md text-xs">
+                                            {{ event.name }}
+                                        </span>
+                                        
+                                    {% empty %}
+                                        <span class="text-gray-500">No Events</span>                                
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>                 
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
         </div>                
         
 
