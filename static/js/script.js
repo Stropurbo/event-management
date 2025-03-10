@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const catlist = document.getElementById("categoryList");
     const selectItem = document.querySelector(".selected");
 
-
     catdropdown.addEventListener("click", function(){
         catlist.classList.toggle('hidden')
     });
@@ -21,8 +20,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     })
 
+});
 
+document.getElementById("menu-toggle").addEventListener('click', function(){
+    document.getElementById('menu').classList.toggle('hidden');
+});
+    
 
-})
 
     

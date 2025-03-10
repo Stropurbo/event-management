@@ -6,13 +6,21 @@ from django.db.models import Q, Count, Max, Min, Avg
 from django.utils import timezone
 
 def home(request):
+    search_q = request.GET.get('search', '')
+    if search_q:
+        all_event = Event.objects.filter(
+            Q(name__icontains = search_q) | Q(location__icontains=search_q)
+        )
+    else:
+        all_event = Event.objects.all()
 
-    all_event = Event.objects.annotate(join_count = Count('participants'))
-    cat = Category.objects.all()
+    all_event = all_event.annotate(join_count = Count('participants'))
+    cat = Category.objects.all()    
     
     context ={
         "all_event" : all_event,
         'cat' : cat,            
+        'search_q' : search_q
     }
     return render(request, 'home.html', context)
 
