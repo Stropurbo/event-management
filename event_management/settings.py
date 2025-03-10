@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -89,6 +90,13 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432'
     }
+}
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://event_management_db_88yl_user:oJ6gsW4DqdXbcsazjyDOoMiolVB3ogbX@dpg-cv7cn8an91rc738i3ro0-a.oregon-postgres.render.com/event_management_db_88yl',
+        conn_max_age=600
+    )
 }
 
 
