@@ -34,37 +34,6 @@ class StyleFormMixin:
                 })
 
 
-# ata holo basic...ata janar
-# class EventForm(forms.Form):    
-#     name = forms.CharField(max_length=200, label="Event Name")
-#     description = forms.CharField(widget=forms.Textarea, label="Event Details")
-#     date = forms.DateField(widget=forms.SelectDateWidget, label="Event Date")
-#     location = forms.CharField(max_length=150, label="Event Location")
-#     category = forms.ModelChoiceField(queryset=Category.objects.all(), label="Category")
-
-#     def __init__(self, *args, **kwargs):
-#         cat = kwargs.pop("cat", None)
-#         super().__init__(*args, **kwargs)
-#         if cat is not None:
-#             self.fields['category'].queryset = cat
-
-# class CategoryForm(forms.Form):
-#     name = forms.CharField(max_length=100, label="Category Name")
-#     description = forms.CharField(widget=forms.Textarea, label="Category Details")
-
-# class Participant(forms.Form):
-#     name = forms.CharField(max_length=100, label="Participate")
-#     email = forms.EmailField(widget=forms.EmailInput, label='E-mail Address' )
-#     event = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False, label="Event")
-
-#     def __init__(self, *args, **kwargs):
-#         ev = kwargs.pop("ev", [])
-#         super().__init__(*args, **kwargs)
-#         self.fields['event'].choices = [
-#             (even.id, even.name) for even in ev
-#         ]
-
-
 # this is great. ata besi besi use korbo
 class EventModelForm(StyleFormMixin, forms.ModelForm):
     class Meta:

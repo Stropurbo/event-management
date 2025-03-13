@@ -4,7 +4,7 @@ from tasks.views import home, create_event, create_category,delete_cat,delete_pa
 
 
 urlpatterns = [
-    path('', home, name="home"),
+    path('home/', home, name="home"),
     path('dashboard/', dashboard, name="dashboard"),
     path('create_event/', create_event, name= 'create_event'),
     path('category_form/', create_category, name='category_form'),

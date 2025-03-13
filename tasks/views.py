@@ -4,9 +4,10 @@ from tasks.models import Event, Category, Participant
 from tasks.forms import EventModelForm, CategoryModelForm, ParticipantModelForm
 from django.db.models import Q, Count, Max, Min, Avg
 from django.utils import timezone
+from django.db import transaction
 
 def home(request):
-    search_q = request.GET.get('search', '')
+    search_q = request.GET.get('search', '').strip()
     if search_q:
         all_event = Event.objects.filter(
             Q(name__icontains = search_q) | Q(location__icontains=search_q)
@@ -26,18 +27,34 @@ def home(request):
 
 def create_event(request):
     event_form = EventModelForm()
-    
+
     if request.method == 'POST':
         event_form = EventModelForm(request.POST)
+        
         if event_form.is_valid():
-            event_form.save()
-        
+            event = event_form.save()
+            print(f"✅ Event '{event.name}' created!")  
             return redirect('dashboard')
-        
+
     context = {
-        "create_event" : event_form
+        "create_event": event_form
     }
     return render(request, 'create_event.html', context)
+
+# def create_event(request):
+#     event_form = EventModelForm()
+    
+#     if request.method == 'POST':
+#         event_form = EventModelForm(request.POST)
+#         if event_form.is_valid():
+#             event_form.save()
+        
+#             return redirect('dashboard')
+        
+#     context = {
+#         "create_event" : event_form
+#     }
+#     return render(request, 'create_event.html', context)
 
 def show_cat(request):    
    cat = Category.objects.all()   
@@ -61,19 +78,44 @@ def create_category(request):
 
     return render(request, 'cat_form.html', context)
 
+
 def create_participate(request):
     partici_form = ParticipantModelForm()
+    events = Event.objects.all()
 
     if request.method == 'POST':
         partici_form = ParticipantModelForm(request.POST)
-        if partici_form.is_valid():
-            partici_form.save()
-            return redirect('partici_form')
+        event_id = request.POST.get("event")
         
+        if partici_form.is_valid() and event_id:
+            participant = partici_form.save(commit=False)
+            participant.save()
+            
+            event = get_object_or_404(Event, id=event_id)
+            event.participants.add(participant)
+
+            return redirect('dashboard')
+
     context = {
-        'partici_form' : partici_form
+        'partici_form': partici_form,
+        'events': events,
     }
     return render(request, 'partici_form.html', context)
+
+
+# def create_participate(request):
+#     partici_form = ParticipantModelForm()
+
+#     if request.method == 'POST':
+#         partici_form = ParticipantModelForm(request.POST)
+#         if partici_form.is_valid():
+#             partici_form.save()
+#             return redirect('dashboard')
+        
+#     context = {
+#         'partici_form' : partici_form
+#     }
+#     return render(request, 'partici_form.html', context)
 
 def delete_participant(request, id):
     if request.method == "POST":
@@ -99,8 +141,9 @@ def update_event(request, id):
     return render(request, 'update_event.html', context)
 
 def delete_event(request, id):
+    event = get_object_or_404(Event, id = id)
+    
     if request.method == 'POST':
-        event = get_object_or_404(Event, id = id)
         event.delete()
         return redirect('dashboard')
     return redirect('dashboard')

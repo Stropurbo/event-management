@@ -3,16 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Participant</title>
 </head>
 <body>
+
+    <h2>Add a New Participant</h2>
+
     <form method='POST'>
         {% csrf_token %}
-        {{partici_form.as_p}}
-        <button type="submit" class= "bg-black text-white p-2 w-150 rounded-md m-5">Submit</button>
+
+
+        {{ partici_form.as_p }}
+
+        <label for="event">Select Event:</label>
+
+        <select name="event" required>
+
+            <option value="">-- Choose an Event --</option>
+
+            {% for event in events %}
+                <option value="{{ event.id }}">{{ event.name }}</option>
+            {% endfor %}
+        </select>
+
+
+
+        <button type="submit" class="bg-black text-white p-2 w-150 rounded-md m-5">Submit</button>
     </form>
-
-
 
 </body>
 </html>
