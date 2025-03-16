@@ -5,6 +5,17 @@ from tasks.forms import EventModelForm, CategoryModelForm, ParticipantModelForm
 from django.db.models import Q, Count, Max, Min, Avg
 from django.utils import timezone
 from django.db import transaction
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+
+
+def is_manager(user):
+    return user.groups.filter(name="Manager").exists()
+
+def is_admin(user):
+    return user.groups.filter(name="Admin").exists()
+
+def is_manager_or_admin(user):
+    return user.is_authenticated and (is_manager(user) or is_admin(user))
 
 def home(request):
     search_q = request.GET.get('search', '').strip()
@@ -25,21 +36,23 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
+@login_required
+@permission_required("tasks.add_event", login_url="no_permission")
 def create_event(request):
     event_form = EventModelForm()
-
     if request.method == 'POST':
         event_form = EventModelForm(request.POST)
         
         if event_form.is_valid():
-            event = event_form.save()
-            print(f"✅ Event '{event.name}' created!")  
+            event_form.save()
             return redirect('dashboard')
 
     context = {
         "create_event": event_form
     }
     return render(request, 'create_event.html', context)
+
+
 
 # def create_event(request):
 #     event_form = EventModelForm()
@@ -63,6 +76,8 @@ def show_cat(request):
    }
    return render(request, 'delete_cat.html', context)
 
+@login_required
+@permission_required("tasks.add_category", login_url="no_permission")
 def create_category(request):
     cat_form = CategoryModelForm()
 
@@ -79,6 +94,8 @@ def create_category(request):
     return render(request, 'cat_form.html', context)
 
 
+@login_required
+@permission_required("tasks.add_participant", login_url="no_permission")
 def create_participate(request):
     partici_form = ParticipantModelForm()
     events = Event.objects.all()
@@ -92,9 +109,10 @@ def create_participate(request):
             participant.save()
             
             event = get_object_or_404(Event, id=event_id)
+            participant.save()
             event.participants.add(participant)
 
-            return redirect('dashboard')
+            return redirect('partici_form')
 
     context = {
         'partici_form': partici_form,
@@ -117,6 +135,8 @@ def create_participate(request):
 #     }
 #     return render(request, 'partici_form.html', context)
 
+@login_required
+@permission_required("tasks.delete_participant", login_url="no_permission")
 def delete_participant(request, id):
     if request.method == "POST":
         par = get_object_or_404(Participant, id = id)
@@ -124,6 +144,8 @@ def delete_participant(request, id):
         return redirect('dashboard')
     return redirect('dashboard')
 
+@login_required
+@permission_required("tasks.change_event", login_url="no_permission")
 def update_event(request, id):
     event = Event.objects.get(id = id)
     if request.method == 'POST':
@@ -140,6 +162,9 @@ def update_event(request, id):
 
     return render(request, 'update_event.html', context)
 
+
+@login_required
+@permission_required("tasks.delete_event", login_url="no_permission")
 def delete_event(request, id):
     event = get_object_or_404(Event, id = id)
     
@@ -148,6 +173,8 @@ def delete_event(request, id):
         return redirect('dashboard')
     return redirect('dashboard')
 
+@login_required
+@permission_required("tasks.delete_category", login_url="no_permission")
 def delete_cat(request):
     allcat = Category.objects.all()
 
@@ -175,8 +202,12 @@ def event_details(request, id):
     }
     return render(request, 'dashboard.html', context)
 
+# @user_passes_test(is_normal_user, login_url='no_permission')
+# def user_dashboard(request):
+#     return render(request, 'user_dashboard.html')
+
+@user_passes_test(is_manager_or_admin, login_url="no_permission")
 def dashboard(request):
-    
     type = request.GET.get('type', 'all')
     today = timezone.now().date()
 
@@ -214,3 +245,9 @@ def dashboard(request):
     }
 
     return render(request, 'dashboard.html', context)
+
+
+def event_details_view(request, id):
+    event = Event.objects.get(id=id)
+    return render(request, "event_details_view.html", {'event': event})
+

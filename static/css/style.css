@@ -64,6 +64,14 @@
     font-size: 30px;
     font-weight: bold;
 }
+.overlaytwo{
+    position: absolute;
+    top: 35%;
+    left: 30%;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+}
 .findevent{
     position: absolute;
     top: 20%;

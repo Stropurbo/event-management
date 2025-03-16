@@ -2,37 +2,60 @@ from django import forms
 from tasks.models import Category, Event, Participant
 
 class StyleFormMixin:
-    default_class = "border to-black shadow-sm focus:border-x-black focus:ring-black rounded-2xl w-full text-center "
-    default_style = "border: 1px solid black; text-align: center;   padding: 10px; text-align: center"
-    default_margin = "border: 1px solid black; margin:10px text-align: center"
+    default_class = "border to-black shadow-sm border-black focus:border-black focus:ring-black rounded-2xl w-full text-center "
+    default_style = "border: 1px solid black; text-align: center;  padding: 10px; text-align: center"
+    default_margin = "border: 1px solid black; margin:10px; text-align: center"
 
     def applyStyle(self):
         for key, field in self.fields.items():
+            label = field.label if field.label else "Field"
+            label_lower = label.lower()
+
             if isinstance(field.widget, forms.TextInput):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f'Enter {field.label.lower()}',
+                    'placeholder' : f'Enter {label_lower}',
+                    'style' : self.default_style
+                })
+            elif isinstance(field.widget, forms.EmailInput):
+                field.widget.attrs.update({
+                    'class' : self.default_class,
+                    'placeholder' : f'Enter {label_lower}',
+                    'style' : self.default_style
+                })
+            elif isinstance(field.widget, forms.EmailField):
+                field.widget.attrs.update({
+                    'class' : self.default_class,
+                    'placeholder' : f'Enter {label_lower}',
+                    'style' : self.default_style
+                })
+            elif isinstance(field.widget, forms.PasswordInput):
+                field.widget.attrs.update({
+                    'class' : self.default_class,
+                    'placeholder' : f'Enter {label_lower}',
                     'style' : self.default_style
                 })
             elif isinstance(field.widget, forms.Textarea):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f"Enter {field.label.lower()}",
+                    'placeholder' : f"Enter {label_lower}",
                     'style': self.default_style
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f"Enter {field.label.lower()}",
+                    'placeholder' : f"Enter {label_lower}",
                     'style': self.default_style
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
                 field.widget.attrs.update({
                     'class' : "m-2",
-                    'placeholder' : f"Enter {field.label.lower()}",
+                    'placeholder' : f"Enter {label_lower}",
                     'style': self.default_style
                 })
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.applyStyle()
 
 # this is great. ata besi besi use korbo
 class EventModelForm(StyleFormMixin, forms.ModelForm):

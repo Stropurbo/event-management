@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class=" justify-centeritems-center m-5">
+
+    <div>
+    {% if event.image %}
+    <img src="{{ event.image.url }}" alt="{{ event.name }}" class="w-96 h-64 object-cover mt-4">
+    {% else %}
+        <img 
+        src="https://i.ibb.co.com/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" 
+        alt="Default Event Image" 
+        class="bannerimage mt-5 rounded-lg" 
+        >
+    {% endif %}
+    {% comment %} <div class="overlaytwo font-serif text-yellow-500 flex flex-col md:flex-row items-center justify-center absolute text-center">
+         
+      </div> {% endcomment %}
+
+    </div>
+
+    <div class="items-center justify-center min-h-screen">
+
+        <div class="p-5 bg-white rounded">
+            <h1 class="text-2xl font-bold font-serif my-5">{{ event.name }}</h1>   
+            <p class="my-5">{{ event.description }}</p>
+            <p class=""><strong>Date:</strong> <span class="ml-3"> {{event.date}}</span></p>
+            <p class=""><strong>Time:</strong> <span class="ml-3"> {{event.time}}</span></p>
+            <p class=""><strong>Category:</strong> <span class="ml-3"> {{event.category}}</span></p> 
+            
+            <div class="bg-red-500 p-2 mt-5 flex rounded-lg items-center text-center hover:bg-gray-600" style="width: 120px;">
+                <div class="text-white font-bold">
+                    REGISTER
+                </div>
+                <div class="mx-2" >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>                  
+                </div>
+            </div>
+        </div>
+
+        
+
+    </div>
+    
+
+
+</div>
+
+    {% endblock content %}

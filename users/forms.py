@@ -1,7 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from django import forms
 import re
+from django.contrib.auth.forms import AuthenticationForm
+from tasks.forms import StyleFormMixin
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -14,10 +16,10 @@ class RegisterForm(UserCreationForm):
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
 
-class CustomRegisterForm(forms.ModelForm): # it is field error
-    password = forms.CharField()
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
-
+class CustomRegisterForm(StyleFormMixin,forms.ModelForm): # it is field error
+    password = forms.CharField(label="Password")
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+    
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'confirm_password']
@@ -44,7 +46,6 @@ class CustomRegisterForm(forms.ModelForm): # it is field error
 
     def clean(self):
         cleaned_data = super().clean()    
-
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
         email = cleaned_data.get('email')
@@ -65,3 +66,28 @@ class CustomRegisterForm(forms.ModelForm): # it is field error
         if commit:
             user.save()
         return user
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.applyStyle() 
+    
+class CustomLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class AssignRoleForm(forms.Form): # form use for get data
+    role = forms.ModelChoiceField(
+        queryset= Group.objects.all(),
+        empty_label= "Select a Role"
+    )
+
+class CreateGroupForm(StyleFormMixin,forms.ModelForm): # model form use for create, update
+    permissions = forms.ModelMultipleChoiceField(
+        queryset=Permission.objects.all(),
+        widget = forms.CheckboxSelectMultiple,
+        required=False,
+        label = 'Assign Permission'
+        )
+    class Meta:
+        model = Group
+        fields = ['name', 'permissions']

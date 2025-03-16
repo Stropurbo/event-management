@@ -1,0 +1,13 @@
+{% extends "admin/dashboard.html" %}
+{% block content %}
+
+<div class="flex justify-center items-center m-5 mx-auto w-1/2">
+    <form action="" method ="POST">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="border border-black p-2 m-5">Assign Role</button>
+    </form>
+</div>
+
+{% endblock content %}
+
