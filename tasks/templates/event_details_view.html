@@ -4,8 +4,8 @@
 <div class=" justify-centeritems-center m-5">
 
     <div>
-    {% if event.image %}
-    <img src="{{ event.image.url }}" alt="{{ event.name }}" class="w-96 h-64 object-cover mt-4">
+    {% if event.asset %}
+    <img src="{{ event.asset.url }}" alt="Event Image" class="w-full h-72 rounded-lg mt-4 object-cover">
     {% else %}
         <img 
         src="https://i.ibb.co.com/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" 

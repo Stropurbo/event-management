@@ -41,7 +41,7 @@ def home(request):
 def create_event(request):
     event_form = EventModelForm()
     if request.method == 'POST':
-        event_form = EventModelForm(request.POST)
+        event_form = EventModelForm(request.POST, request.FILES)
         
         if event_form.is_valid():
             event_form.save()
@@ -148,8 +148,9 @@ def delete_participant(request, id):
 @permission_required("tasks.change_event", login_url="no_permission")
 def update_event(request, id):
     event = Event.objects.get(id = id)
+    
     if request.method == 'POST':
-        form = EventModelForm(request.POST, instance = event)
+        form = EventModelForm(request.POST, request.FILES, instance = event)
         if form.is_valid():
             form.save()
         return redirect('dashboard')

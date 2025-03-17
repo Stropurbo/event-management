@@ -140,13 +140,6 @@
     background: grey;
 }
 
-.imageforevent{
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-    object-fit: cover;
-}
 .eventcontent{
     margin-top: 10px;
     width: 400px;

@@ -19,6 +19,8 @@ class Event(models.Model):
         ('COMPLETED', 'Completed')
     ], default='UPCOMING', db_index=True)
 
+    asset = models.ImageField(upload_to='event_asset', blank=True, null=True)
+
     category = models.ForeignKey(
         Category, 
         on_delete= models.CASCADE, 

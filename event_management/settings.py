@@ -91,8 +91,8 @@ DATABASES = {
         'NAME': config('DB_NAME', default=''),
         'USER': config('DB_USER', default=''),
         'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST': config('DB_HOST', default=''),
-        'PORT': config('DB_PORT', cast = int)
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='', cast = int)
     }
 }
 
@@ -142,6 +142,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
