@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect,HttpResponse
+from django.shortcuts import render, redirect,HttpResponse,get_object_or_404
 from users.forms import CustomRegisterForm, AssignRoleForm,CreateGroupForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.decorators import login_required, user_passes_test
-
+from django.contrib.auth.decorators import login_required, user_passes_test,permission_required
+from django.db.models import Prefetch, Count, Q
+from tasks.views import Event, Category
+from django.utils import timezone
 
 def is_manager(user):
     return "Manager" in [group.name for group in user.groups.all()]
@@ -82,17 +84,16 @@ def logout_view(request):
 
 @user_passes_test(is_manager_or_admin, login_url="no_permission")
 def admin_dashboard(request):
-    users = User.objects.prefetch_related('groups').all()  
+
+    users = User.objects.prefetch_related(
+        Prefetch('groups',  queryset=Group.objects.all(), to_attr='all_groups')
+    ).all()
     
     for user in users:
-        user.group_name = "No Group"
-        for group in user.groups.all():
-            if group.name == 'Manager':
-                user.group_name = 'Manager'
-                break
-            elif group.name == 'Admin':
-                user.group_name = 'Admin'
-                break
+        if user.all_groups:
+            user.group_name = user.all_groups[0].name
+        else:
+            user.group_name = "No Group"
 
     return render(request, "admin/dashboard.html", {'users': users})
 
@@ -104,10 +105,15 @@ def assign_role(request, user_id):
 
     if request.method == "POST":
         form = AssignRoleForm(request.POST)
+
         if form.is_valid():
             role = form.cleaned_data.get('role')
-            user.groups.clear() # remove old data
-            user.groups.add(role)
+            group = Group.objects.filter(name=role).first()
+
+            if group:
+                user.groups.clear() # remove old data
+                user.groups.add(group)
+
             return redirect('admin-dashboard')
     return render(request, "admin/assign_role.html", {'form': form})
 
@@ -130,3 +136,52 @@ def group_list(request):
 
 def no_permission(request):
     return render(request, "no_permission.html")
+
+def admin_event(request):
+
+    type = request.GET.get('type', 'all')
+    today = timezone.now().date()
+    events = Event.objects.all()
+
+    event_count = Event.objects.aggregate(
+        total = Count('id'),
+        upcoming = Count('id', filter=Q(status = 'UPCOMING')),
+        completed = Count('id', filter=Q(status = 'COMPLETED')),
+        today_event = Count('id', filter=Q(date = today)),
+        past_event = Count('id', filter=Q(date__lt = today))
+    )
+
+    if type == 'today':
+        events = Event.objects.filter(date = today)
+    elif type == 'upcoming':
+        events = Event.objects.filter(date__gte = today)
+    elif type == 'completed':
+        events = Event.objects.filter(status = 'COMPLETED')
+    elif type == 'past':
+        events = Event.objects.filter(date__lt = today)
+    elif type == 'all':
+        events = Event.objects.all()
+    else:
+        events = Event.objects.all()
+
+    context = {
+        'event_count' : event_count,
+        'events' : events,
+    }
+
+    return render(request, "admin_event.html", context)
+
+@login_required
+def user_dash(request):
+    
+    user = request.user
+
+    user_join_event = Event.objects.filter(participants=user)
+
+    context = {
+        'user_join_event' : user_join_event,
+        'event_count' : user_join_event.count()
+    }
+
+    return render(request, "user_dash.html", context)
+

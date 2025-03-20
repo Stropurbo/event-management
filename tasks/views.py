@@ -1,12 +1,12 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from tasks.models import Event, Category, Participant
+from tasks.models import Event, Category
 from tasks.forms import EventModelForm, CategoryModelForm, ParticipantModelForm
-from django.db.models import Q, Count, Max, Min, Avg
+from django.db.models import Q, Count
 from django.utils import timezone
-from django.db import transaction
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 def is_manager(user):
     return user.groups.filter(name="Manager").exists()
@@ -40,34 +40,30 @@ def home(request):
 @permission_required("tasks.add_event", login_url="no_permission")
 def create_event(request):
     event_form = EventModelForm()
+
     if request.method == 'POST':
         event_form = EventModelForm(request.POST, request.FILES)
         
         if event_form.is_valid():
-            event_form.save()
-            return redirect('dashboard')
+
+            event = event_form.save()
+            participants = event_form.cleaned_data['participants']
+            event.participants.set(participants) # for save participant
+
+            event.save()
+
+        if request.user.groups.filter(name="Admin").exists():
+            return redirect('dashboard')  
+        elif request.user.groups.filter(name="Manager").exists():
+            return redirect('admin_event') 
+        else:
+            return redirect('delete_cat') 
 
     context = {
         "create_event": event_form
     }
     return render(request, 'create_event.html', context)
 
-
-
-# def create_event(request):
-#     event_form = EventModelForm()
-    
-#     if request.method == 'POST':
-#         event_form = EventModelForm(request.POST)
-#         if event_form.is_valid():
-#             event_form.save()
-        
-#             return redirect('dashboard')
-        
-#     context = {
-#         "create_event" : event_form
-#     }
-#     return render(request, 'create_event.html', context)
 
 def show_cat(request):    
    cat = Category.objects.all()   
@@ -85,7 +81,13 @@ def create_category(request):
         cat_form = CategoryModelForm(request.POST)
         if cat_form.is_valid():
             cat_form.save()
-            return redirect('dashboard')
+
+        if request.user.groups.filter(name="Admin").exists():
+            return redirect('dashboard')  
+        elif request.user.groups.filter(name="Manager").exists():
+            return redirect('admin-dashboard') 
+        else:
+            return redirect('delete_cat') 
         
     context = {
         'cat_form' : cat_form
@@ -105,14 +107,22 @@ def create_participate(request):
         event_id = request.POST.get("event")
         
         if partici_form.is_valid() and event_id:
-            participant = partici_form.save(commit=False)
-            participant.save()
+            event = partici_form.cleaned_data.get("event")
+            participants = partici_form.cleaned_data.get("participants")
+        
             
-            event = get_object_or_404(Event, id=event_id)
-            participant.save()
-            event.participants.add(participant)
+            for participant in participants:
+                participant.save()  
+                event.participants.add(participant)
 
-            return redirect('partici_form')
+            messages.success(request, "Participant added Successfull")
+
+        if request.user.groups.filter(name="Admin").exists():
+            return redirect('dashboard')  
+        elif request.user.groups.filter(name="Manager").exists():
+            return redirect('admin_event') 
+        else:
+            return redirect('delete_cat') 
 
     context = {
         'partici_form': partici_form,
@@ -121,27 +131,25 @@ def create_participate(request):
     return render(request, 'partici_form.html', context)
 
 
-# def create_participate(request):
-#     partici_form = ParticipantModelForm()
-
-#     if request.method == 'POST':
-#         partici_form = ParticipantModelForm(request.POST)
-#         if partici_form.is_valid():
-#             partici_form.save()
-#             return redirect('dashboard')
-        
-#     context = {
-#         'partici_form' : partici_form
-#     }
-#     return render(request, 'partici_form.html', context)
-
 @login_required
-@permission_required("tasks.delete_participant", login_url="no_permission")
-def delete_participant(request, id):
+@permission_required("tasks.delete_user", login_url="no_permission")
+def delete_participant(request, event_id, user_id):
     if request.method == "POST":
-        par = get_object_or_404(Participant, id = id)
-        par.delete()
-        return redirect('dashboard')
+
+        event = get_object_or_404(Event, id=event_id)
+        user = get_object_or_404(User, id=user_id)
+
+        if user in event.participants.all():
+            event.participants.remove(user)
+            messages.success(request, f"Successfully removed {user.first_name} from the event.")
+
+        if request.user.groups.filter(name="Admin").exists():
+            return redirect('dashboard')  
+        elif request.user.groups.filter(name="Manager").exists():
+            return redirect('admin_event') 
+        else:
+            return redirect('delete_cat') 
+
     return redirect('dashboard')
 
 @login_required
@@ -153,7 +161,15 @@ def update_event(request, id):
         form = EventModelForm(request.POST, request.FILES, instance = event)
         if form.is_valid():
             form.save()
-        return redirect('dashboard')
+
+        if request.user.groups.filter(name="Admin").exists():
+            return redirect('dashboard')  
+        elif request.user.groups.filter(name="Manager").exists():
+            return redirect('admin_event') 
+        else:
+            return redirect('delete_cat') 
+        
+    
     else:
         form = EventModelForm(instance = event)
     
@@ -171,7 +187,15 @@ def delete_event(request, id):
     
     if request.method == 'POST':
         event.delete()
-        return redirect('dashboard')
+        
+        if request.user.groups.filter(name="Admin").exists():
+            return redirect('dashboard')  
+        elif request.user.groups.filter(name="Manager").exists():
+            return redirect('admin_event') 
+        else:
+            return redirect('delete_cat') 
+    
+
     return redirect('dashboard')
 
 @login_required
@@ -185,7 +209,13 @@ def delete_cat(request):
         for cat_id in select_cat:
             category = get_object_or_404(Category, id=cat_id)
             category.delete()
-        return redirect('delete_cat') 
+
+        if request.user.groups.filter(name="Admin").exists():
+            return redirect('dashboard')  
+        elif request.user.groups.filter(name="Manager").exists():
+            return redirect('admin-dashboard') 
+        else:
+            return redirect('delete_cat') 
     
     context = {
         'cat' : allcat
@@ -195,17 +225,14 @@ def delete_cat(request):
 
 
 def event_details(request, id):
-    event = Event.objects.prefetch_related('participants').get(id=id)
-    participants = event.participants.all()
+    event = Event.objects.prefetch_related('participants').get(id=id) # ev.id
+    participants = event.participants.all() # par.id
+
     context = {
         "event_details" : event,
         'participants' : participants
     }
     return render(request, 'dashboard.html', context)
-
-# @user_passes_test(is_normal_user, login_url='no_permission')
-# def user_dashboard(request):
-#     return render(request, 'user_dashboard.html')
 
 @user_passes_test(is_manager_or_admin, login_url="no_permission")
 def dashboard(request):
@@ -220,17 +247,16 @@ def dashboard(request):
         past_event = Count('id', filter=Q(date__lt = today))
     )
     
-    total_participate = Participant.objects.count()
-    participants = Participant.objects.annotate(
-        event_count = Count('event')
-    ).prefetch_related('event')
+    total_participate = User.objects.filter(rsvp_event__isnull=False).count()
 
+    participants = User.objects.annotate(event_count = Count('rsvp_event'))
+    
     if type == 'today':
         events = Event.objects.filter(date = today)
     elif type == 'upcoming':
         events = Event.objects.filter(date__gte = today)
     elif type == 'completed':
-        events = Event.objects.filter(date__lt = today)
+        events = Event.objects.filter(status = "COMPLETED")
     elif type == 'past':
         events = Event.objects.filter(date__lt = today)
     elif type == 'all':
@@ -252,3 +278,15 @@ def event_details_view(request, id):
     event = Event.objects.get(id=id)
     return render(request, "event_details_view.html", {'event': event})
 
+def rsvp_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.user in event.participants.all():
+        messages.warning(request, "You have already in this event.")
+    else:
+        event.participants.add(request.user)
+        messages.success(request, "Congratulations, You have Successfully Enrolled this Event.")
+
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+    

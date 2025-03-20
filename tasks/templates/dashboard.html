@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    <script src="{% static 'js/script.js' %}"></script>
+
 </head>
 <body class = "m-8 bg-zinc-100">
 
@@ -15,7 +17,8 @@
 
         <div class= "flex justify-between">
             <div>
-                 <a href="{% url "dashboard" %}" class = "font-bold p-2 text-xl">
+                
+            <a href="{% url "dashboard" %}" class = "font-bold p-2 text-xl">
                 Dashboard
             </a>
             <a href="{% url "home" %}" class = "font-bold p-2 text-xl text-green-500">
@@ -28,13 +31,15 @@
                 <a href="{% url "create_event" %}" class="createevent p-2 bg-green-500 text-black rounded-lg">Create Event</a>
                 <a href="{% url "partici_form" %}" class="createevent p-2 bg-green-500 text-black rounded-lg">Add Participate</a>
 
-                <div class="dropdown bg-green-500 rounded-lg">                                       
-                    <button class="createevent">Category</button>                      
-                    <div class="content">
-                        <a href="{% url "category_form" %}">Create</a>
-                        <a href="{% url 'show_cat' %}">Delete</a>
+                <div class="dropdown rounded-lg bg-green-500">                                       
+                    <button id="categoryDropdown" class="createevent">Category</button>                      
+                    <div id="categoryList" class="content hidden">
+                        <a href="{% url 'category_form' %}" class="catItem">Create</a>
+                        <a href="{% url 'show_cat' %}" class="catItem">Delete</a>
                     </div>
                 </div>
+                
+                
             
                 <div class= "alramicon rounded-full p-2 hover:bg-gray-200">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -53,12 +58,24 @@
                 </button>
 
 
-            </div>            
+            </div>  
+            
+            
         </div>
         
     </header>
     
     <main>
+
+        {% if messages %}
+            <div class="alert-container flex justify-center p-5">
+                <ul class="alert-list">
+                    {% for message in messages %}
+                        <li class="alert alert-success text-green-500 font-bold">{{ message }}</li> 
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
         <div class = "mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 
@@ -140,23 +157,22 @@
                     {% for event in events %}
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-3">
 
-                    <div class="mx-5">
-                        <li class="font-medium">{{event.name}} - {{event.date}} - {{event.location}}</li>
-                    </div>
+                        <div class="mx-5">
+                            <li class="font-medium">{{event.name}} - {{event.date}} - {{event.location}}</li>
+                        </div>
                     
-                    <div class="m-2 flex gap-2 flex-wrap">
-                        <a href="{% url 'update_event' event.id %}" 
-                        class="createevent bg-green-500 rounded-lg text-sm p-2 text-black "
-                        >Edit</a>
+                        <div class="m-2 flex gap-2 flex-wrap">
+                            <a href="{% url 'update_event' event.id %}" 
+                            class="createevent bg-green-500 rounded-lg text-sm p-2 text-black "
+                            >Edit</a>
 
-                        <form action="{% url 'delete_event' event.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="createevent bg-red-500 rounded-xl p-2 text-black">Delete</button>
-                        </form>                       
-
-                    </div>
-
-                                     
+                            <form action="{% url 'delete_event' event.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="createevent bg-red-500 rounded-xl p-2 text-black">
+                                    Delete
+                                </button>
+                            </form>                      
+                        </div>                                     
                     </div>
                     {% endfor %}
                 </ol>
@@ -176,31 +192,38 @@
                     <thead>
                         <tr class="bg-gray-300 ">
                             <th class="border p-2 sm:p-3">Name</th>
+                            <th class="border p-2 sm:p-3">Username</th>
                             <th class="border p-2 sm:p-3">E-mail</th>
                             <th class="border p-2 sm:p-3 text-center">Events</th>
                             <th class="border p-2 sm:p-3">Participated</th>
                         </tr>
                     </thead>
+                    
                     <tbody>
                         {% for participant in participants %}
                         <tr class="border">
                             
                             <td class="partiname p-2 sm:p-3 flex justify-between items-center gap-2">
-                                <span class="truncate flex items-center justify-center text-center">{{participant.name}}</span>
-                                <form action="{% url 'delete_participant' participant.id %}" method="POST">
-                                    {% csrf_token %}
-                                    <button class="delete-participant text-gray-500 hover:bg-red-500">
-                                        Delete
-                                    </button>
-                                </form>                          
-                            </td> 
+                                <span class="truncate flex items-center justify-center text-center">{{participant.get_full_name}}</span>
+                                
+                                {% for event in participant.rsvp_event.all %}
+                                    <form action="{% url 'delete_participant' event.id participant.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button class="delete-participant text-gray-500 hover:bg-red-500">
+                                            Delete
+                                        </button>
+                                    </form>  
+                                {% endfor %}
 
+                            </td> 
+                            
+                            <td class="border p-2 sm:p-3 truncate"> {{participant.username}} </td>
                             <td class="border p-2 sm:p-3 truncate"> {{participant.email}} </td>
-                            <td class="border p-2 sm:p-3 text-center"> {{participant.event_count}} </td>
+                            <td class="border p-2 sm:p-3 text-center"> {{participant.rsvp_event.count }} </td>
 
                             <td class="border p-2 sm:p-3">
                                 <div class="flex flex-wrap gap-1">
-                                {% for event in participant.event.all %}                                                       
+                                {% for event in participant.rsvp_event.all %}                                                       
                                         <span class="bg-blue-500 text-white p-2 m-2 rounded-md text-xs">
                                             {{ event.name }}
                                         </span>

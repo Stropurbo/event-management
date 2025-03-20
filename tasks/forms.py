@@ -1,5 +1,6 @@
 from django import forms
-from tasks.models import Category, Event, Participant
+from tasks.models import Category, Event
+from django.contrib.auth.models import User
 
 class StyleFormMixin:
     default_class = "border to-black shadow-sm border-black focus:border-black focus:ring-black rounded-2xl w-full text-center "
@@ -43,9 +44,9 @@ class StyleFormMixin:
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
                 field.widget.attrs.update({
-                    'class' : self.default_class,
+                    # 'class' : self.default_class,
                     'placeholder' : f"Enter {label_lower}",
-                    'style': self.default_style
+                    
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
                 field.widget.attrs.update({
@@ -53,6 +54,7 @@ class StyleFormMixin:
                     'placeholder' : f"Enter {label_lower}",
                     'style': self.default_style
                 })
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.applyStyle()
@@ -61,10 +63,11 @@ class StyleFormMixin:
 class EventModelForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name','description','date','location','category','status', 'asset']
+        fields = ['name','description','date','location','category','status', 'asset', 'participants']
         widgets = {
             'date' : forms.SelectDateWidget,
-            'category' : forms.RadioSelect
+            'category' : forms.RadioSelect,
+            'participants' : forms.CheckboxSelectMultiple()
         }
         labels = {
             'name': 'Name',
@@ -72,12 +75,14 @@ class EventModelForm(StyleFormMixin, forms.ModelForm):
             'date': 'Date',
             'location': 'Location',
             'category' : 'Category',
-            'status' : 'Status'
-        }
+            'status' : 'Status',
+            'participants' : 'Participants'
+        }   
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.order_by('name')
+        self.fields['participants'].queryset = User.objects.order_by('first_name')
         self.applyStyle()
 
 class CategoryModelForm(StyleFormMixin, forms.ModelForm):
@@ -90,19 +95,30 @@ class CategoryModelForm(StyleFormMixin, forms.ModelForm):
         self.applyStyle()
 
 class ParticipantModelForm(StyleFormMixin, forms.ModelForm):
+    
+    event = forms.ModelChoiceField(
+        queryset= Event.objects.all(),
+        widget= forms.Select(),
+        required=True
+    )
+
+    participants = forms.ModelMultipleChoiceField(
+        queryset= User.objects.all(),
+        widget= forms.CheckboxSelectMultiple(),
+        required=True
+    )
     class Meta:
-        model = Participant
-        fields = ["name","email","event"]
+        model = Event
+        fields = ["participants"]
 
-        widgets = {
-            'email' : forms.EmailInput,
-            'event' : forms.CheckboxSelectMultiple
-        }
-
+        # widgets = {
+        #     'email' : forms.EmailInput,
+        # }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.applyStyle()
+        self.applyStyle()   
 
+        # self.fields['username'].help_text = None
 
 
 

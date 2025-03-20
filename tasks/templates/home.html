@@ -90,20 +90,20 @@
 
             <div class="mx-5  font-bold text-gray-600">
               Category
-              <p class="text-center font-bold text-black"> {{ev.category}} </p>
+              <p class="text-center font-bold text-black"> {{ev.category.name}} </p>
             </div>
 
             <div class="mx-5  font-bold text-gray-600">
               Joined
-              <p class="text-center font-bold text-black"> {{ev.join_count}} </p>
+              <p class="text-center font-bold text-black"> {{ev.participants.count}} </p>
             </div>  
             
-            <a href="{% url 'partici_form' %}" 
-            class=" bg-gray-500 bg-gradient-to-r from-yellow-500 via-orange-50-500 
-            to-red-500 rounded-2xl w-[150px] h-10 flex items-center justify-center 
-            font-bold text-center text-white font-sans hover:bg-gray-500
-             hover:text-black">
-                GO JOIN
+            <a href="{% url 'rsvp_event' ev.id %}" 
+            class=" bg-orange-500 rounded-2xl w-[150px] h-10 flex items-center justify-center 
+            font-bold text-center text-white font-sans 
+            hover:bg-gray-500"
+            >
+                RSVP
             </a>
 
           </div>

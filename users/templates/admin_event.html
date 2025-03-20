@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+</head>
+<body>
+
+    <header class="bg-white shadow-md">
+        <nav class="container mx-auto px-6 py-3">
+          <div class="flex justify-between items-center">
+            <a href="{% url "home" %}" class="text-xl font-bold text-gray-800"
+              >Home</a
+            >
+            <div class="hidden md:flex space-x-4">
+              {% if user.is_authenticated and user.is_staff %}
+              <a
+                href="{% url "dashboard" %}"
+                class="text-gray-600 hover:text-gray-800"
+                >Admin Dashboard</a
+              >
+              {% endif %}
+              
+              <a
+                href="{% url "admin_event" %}"
+                class="text-gray-600 hover:text-gray-800"
+                >Manager Dashboard</a
+              >
+              
+              {% if user.is_authenticated and user.is_staff %}
+              <a href="{% url 'group_list' %}" class="text-gray-600 hover:text-gray-800"
+                >Groups</a
+              >
+              {% endif %}
+              
+              {% if user.is_authenticated and user.is_staff %}
+              <a
+                href="{% url 'create_group' %}"
+                class="text-gray-600 hover:text-gray-800"
+                >Create Group</a
+              >
+              {% endif %}
+    
+                <div class="relative drpdwn">   
+                  <button id="category-text" class="text-gray-600 hover:text-gray-800">Category</button>
+    
+                  <div id="cat-list" class="absolute mt-2 w-32 bg-white rounded-lg shadow-lg hidden">
+                      <a href="{% url 'category_form' %}" class="block p-5 text-sm text-gray-700 hover:bg-gray-100"
+                      >Create
+                    </a>
+                      <a href="{% url 'show_cat' %}" class="block text-sm p-5 text-gray-700 hover:bg-gray-100">
+                        Delete
+                    </a>
+                  </div>            
+                </div> 
+                <a href="{% url "admin_event" %}" class="relative">   
+                  <button class="text-gray-600 rounded-full hover:text-gray-800">Event</button>
+                </a> 
+                    
+            
+    
+            </div>
+    
+            
+    
+            <div class="flex items-center">
+              <div class="relative">
+    
+                <button id="user-menu-button" class="rounded-full p-2 bg-blue-500 text-white w-8 h-8 
+                  flex items-center justify-center hover:bg-gray-700">
+                      {% if user.groups.all.0.name == "Admin" %}
+                          A
+                      {% elif user.groups.all.0.name == "Manager" %}
+                          M
+                      {% else %}
+                          U
+                      {% endif %}
+                  </button>   
+    
+                
+                  <div id="user-menu"
+                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden"
+                    >
+                    <a
+                      href=""
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      ></a
+                      >
+                    <form method="post" action="{% url "logout" %}">
+                      {% csrf_token %}
+                      <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Logout
+                      </button>
+                    </form>
+                  </div>
+    
+              </div>
+    
+              <div class="md:hidden ml-4">
+                <button
+                  id="menu-toggle"
+                  class="text-gray-600 hover:text-gray-800 focus:outline-none"
+                >
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 6h16M4 12h16m-7 6h7"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+    
+          </div>
+          <div id="mobile-menu" class="md:hidden hidden mt-4">
+            <a href="#" class="block py-2 text-gray-600 hover:text-gray-800"
+              >Dashboard</a
+            >                  
+            <a href="#" class="block py-2 text-gray-600 hover:text-gray-800"
+              >Groups</a
+            >
+            <a href="{% url 'create_group' %}" class="block py-2 text-gray-600 hover:text-gray-800"
+              >Create Group</a
+            >
+          </div>
+        </nav>
+    </header>
+
+    <main>
+        
+        <div>
+            <div class="mt-8 w-full flex flex-wrap justify-center gap-3">
+                <a href="?type=all" class="createevent p-2 bg-gray-600 text-white rounded-lg ">All Events</a>
+                <a href="?type=today" class="createevent p-2 bg-green-500 text-white rounded-lg">Today Events</a>
+                <a href="?type=upcoming" class="createevent p-2 bg-yellow-600 text-white rounded-lg">Upcoming Events</a>
+                <a href="?type=past" class="createevent p-2 bg-blue-600 text-white rounded-lg">Past Events</a>
+                <a href={% url "create_event" %} class="createevent p-2 bg-red-900 text-white rounded-lg">Create Events</a>
+            </div>
+        </div>
+
+
+        <div class="bg-white w-full p-5 mt-5 rounded-xl">        
+            
+                <ol class="list-decimal space-y-4">
+                    {% for event in events %}
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-3">
+
+                        <div class="mx-5">
+                            <li class="font-medium">{{event.name}} - {{event.date}} - {{event.location}}</li>
+                        </div>
+                    
+                        <div class="m-2 flex gap-2 flex-wrap">
+                            <a href="{% url 'update_event' event.id %}" 
+                            class="createevent bg-green-500 rounded-lg text-sm p-2 text-black "
+                            >Edit</a>
+
+                            <form action="{% url 'delete_event' event.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="createevent bg-red-500 rounded-xl p-2 text-black">
+                                    Delete
+                                </button>
+                            </form>                      
+                        </div>                                     
+                    </div>
+                    {% endfor %}
+                </ol>
+                <div>
+
+                </div>
+        </div>
+
+    </main>
+    <script src="{% static 'js/script.js' %}" ></script>
+</body>
+</html>
+
+

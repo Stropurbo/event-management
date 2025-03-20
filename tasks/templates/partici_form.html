@@ -1,21 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Participant</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h2>Add a New Participant</h2>
+{% block content %}
 
-    <form method='POST'>
-        {% csrf_token %}
+    <h2 class="flex justify-center font-bold m-5">Add a New Participant</h2>
 
-        {{ partici_form.as_p }}
+    <div class="flex justify-center items-center">
+        <form method="POST">
+            {% csrf_token %}
 
-        <button type="submit" class="bg-black text-white p-2 w-150 rounded-md m-5">Submit</button>
-    </form>
+            {% comment %} <div class="mt-5">
+                <label for="">Name</label>
+                {{partici_form.name}}
+            </div> {% endcomment %}
 
-</body>
-</html>
+            {% comment %} <div class="mt-5">
+                <label for="">E-mail</label>
+                {{partici_form.email}}
+            </div> {% endcomment %}
+
+            <div class="mt-5">
+                <label for="">Event</label><br>
+                {{partici_form.event}}
+            </div>
+
+            <div class="mt-5">
+                <label for="">Participant</label><br>
+                {{partici_form.participants}}
+            </div>
+
+            <button type="submit" 
+            class="bg-green-500 text-white rounded-lg py-2 px-4 w-full mt-5 font-medium hover:bg-gray-500">
+                Submit
+            </button>
+
+        </form>
+    
+    </div>
+     
+</div>
+
+    {% endblock content %}
