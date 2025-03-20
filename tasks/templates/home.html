@@ -4,53 +4,58 @@
 
  {% block content %}
 
-  <main class="">
+  <main class="overflow-x-hidden">
     <div class="relative mt-5">
       <div class="imagecontainer flex mt-5 items-center">
         <img class="bannerimage w-full" src="https://i.ibb.co.com/kgMRsmnN/travelling-Banner-Landscape.png" alt="banner">
-        <div class="sabbiroverlay text-yellow-500 flex flex-col md:flex-row items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-          <div class="font-normal text-3xl md:text-5xl">SABBIR </div>
-          <div class="mx-2 text-yellow-300 text-xl md:text-4xl">EVENTS</div>
+        <div class="sabbiroverlay text-yellow-500 flex-col md:flex-row items-center 
+        justify-center absolute top-1/2 left-1/2 
+        transform -translate-x-1/2 -translate-y-1/2 
+        text-center"
+        >
+          <p class="font-roboto">One Stop</p>
+          <p class="font-poppins" style="font-weight: 500;">Event Planner</p>
+          <p class="font-light">E V E R Y C H O I C E B E P E R F E C T</p>
         </div>
         
       </div>
     </div>
     
-    <div class="imagecontainer flex relative">
+    <div class="imagecontainer flex relative w-full">
       <img class="w-full" 
       src="https://i.ibb.co.com/Kpf8n71Z/special-offer-bg.png" 
       alt="images" srcset=""
       >
-      <div class="findevent p-4 absolute flex md:flex-row flex-col justify-between">
-      
-          <div class="text-white font-sans font-bold text-xl">
-            FIND BEST EVENTS ON SABBIR
-            <br>Event Search
+      <div class="findevent absolute flex md:flex-row flex-col 
+        justify-between w-full items-center"
+        >      
+          <div class="text-white font-medium text-xl">
+            FIND THE BEST EVENTS
+            
           </div>               
                   
-          <div class="search-container ">
+          <div class="search-container w-full max-w-screen-lg mx-auto">
             <form action="{% url 'home' %}" method="GET" 
             class="flex md:flex-row flex-col sm:justify-center sm:items-center md:flex-nowrap 
                space-y-3 sm:space-y-3 md:space-y-0 md:space-x-3 items-center">
-              <div>
+              
                 <input type="text" name="search" placeholder="Events names, locations" 
-                class="w-64 border p-2" >
-              </div> 
-
-                <div>
-                  <select name = "category" class="select border p-2 sm:w-16" id="categoryDropdown">
+                class="w-32 border p-2 rounded-lg" 
+                >
+              
+                <select name = "category" class="select border p-2 rounded-lg" id="categoryDropdown">
                     <option value="" class="selected">Category</option>
                       {% for category in cat %}
                       <option class="catItem"> {{category.name}} </option>
                       {% endfor %}
-                  </select>
-                </div>                    
+                </select>                                  
                 
-                <div class="cat-main-container sm:w-16">
-                  <button type="submit" class="searchname bg-gray-600 p-2 flex items-center justify-center mx-1 font-bold text-white hover:bg-gradient-to-r hover:from-orange-500 to-red-500">
+                <button type="submit" 
+                  class="searchname bg-gray-600 p-2 rounded-lg flex items-center justify-center font-bold
+                  text-white hover:bg-gradient-to-r hover:from-orange-500 to-red-500">
                     SEARCH
-                  </button>
-                </div>
+                </button>
+                
 
             </form>
           </div>         
@@ -59,20 +64,22 @@
       
     </div>
 
-    <div class="listevent grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-5">
+    <div class="listevent grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-5 w-auto">
       {% if all_event %}
       {% for ev in all_event %}     
-        <div class="eventcontent flex flex-nowrap items-center flex-col shadow-lg rounded-lg p-5 m-5 bg-red-500"> 
-          <a href="{% url 'event_details_view' id=ev.id %}" class="flex justify-center">
+        <div class="eventcontent flex flex-wrap items-center 
+        flex-col shadow-lg rounded-lg p-5 bg-red-500 w-auto"
+        > 
+          <a href="{% url 'event_details_view' id=ev.id %}" class="flex justify-center w-auto">
             
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center w-auto ">
 
               {% if ev.asset %}
-              <div class="w-96 h-48 overflow-hidden flex justify-center rounded-lg">
+              <div class="w-auto h-48 overflow-hidden flex justify-center rounded-lg">
                   <img class="object-cover w-full h-full" src="{{ ev.asset.url }}" alt="Event Image">
               </div>
               {% else %}
-                  <div class="w-96 h-48 overflow-hidden flex justify-center">
+                  <div class="w-auto h-48 overflow-hidden flex justify-center">
                       <img class="object-cover w-full h-full" 
                           src="https://i.ibb.co.com/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" 
                           alt="Default Event Image">
@@ -86,7 +93,7 @@
             </div>
           </a>
         
-          <div class="flex md:flex-row flex-col flex-nowrap justify-between items-center mt-3">      
+          <div class="w-auto flex md:flex-row flex-col flex-nowrap justify-between items-center mt-3">      
 
             <div class="mx-5  font-bold text-gray-600">
               Category
@@ -111,7 +118,9 @@
         </div>
       {% endfor %}
       {% else %}
-       <p class="text-center text-gray-700 font-bold">No Events Founds.</p>
+    
+        <p class="flex justify-center items-center text-center text-gray-700 font-bold text-2xl m-5">No Events Found.</p>
+      
       {% endif %}
 
 
