@@ -105,13 +105,19 @@
               <p class="text-center font-bold text-black"> {{ev.participants.count}} </p>
             </div>  
             
-            <a href="{% url 'rsvp_event' ev.id %}" 
+            {% comment %} <a href="{% url 'rsvp_event' ev.id %}" 
             class=" bg-orange-500 rounded-2xl w-[100px] h-10 flex items-center justify-center 
             font-bold text-center text-white font-sans 
             hover:bg-gray-500"
             >
                 RSVP
-            </a>
+            </a> {% endcomment %}
+            <form action="{% url "rsvp_event" ev.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class=" bg-orange-500 rounded-2xl w-[100px] h-10 flex items-center justify-center 
+              font-bold text-center text-white font-sans 
+              hover:bg-gray-500">RSVP</button>
+            </form>
 
           </div>
   

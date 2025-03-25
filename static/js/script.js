@@ -65,6 +65,3 @@ setTimeout(function() {
         }
     });
      
-
-
-    

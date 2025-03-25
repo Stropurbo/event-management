@@ -31,16 +31,16 @@
                 <li><a class="hover:text-gray-500" href="{% url "home" %}">About</a></li>
 
                 <div>
-                    <a href="{% if user.is_authenticated %} 
+                    {% comment %} <a href="{% if user.is_authenticated %} 
                     {% url "logout" %}
                     {% else %}
                     {% url "signup" %}              
                     {% endif %}" 
-
                     class = "rounded-full p-2 bg-blue-500 text-white w-8 h-8 
-                    flex items-center justify-center hover:bg-gray-700">  
+                    flex items-center justify-center hover:bg-gray-700">   {% endcomment %}
 
-                    <button>
+                    <a href="{% url 'profile' %}" class = "rounded-full p-2 bg-blue-500 text-white w-8 h-8 
+                    flex items-center justify-center hover:bg-gray-700">
                         {% if user.is_authenticated %}
 
                         {% if user.groups.all.0.name == "Admin" %}
@@ -54,8 +54,8 @@
                         {% else %}
                         S                 
                         {% endif %}
-                    </button>                            
-                </a>   
+                    </a>                            
+                {% comment %} </a>    {% endcomment %}
                 </div>
                                                      
                 </ul>           

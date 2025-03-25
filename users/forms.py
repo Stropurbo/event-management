@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm, PasswordResetForm,SetPasswordForm
 from django.contrib.auth.models import User, Group, Permission
 from django import forms
 import re
@@ -91,3 +91,55 @@ class CreateGroupForm(StyleFormMixin,forms.ModelForm): # model form use for crea
     class Meta:
         model = Group
         fields = ['name', 'permissions']
+
+
+class CustomChangePasswordForm(StyleFormMixin, PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.help_text = ""
+    pass
+
+class CustomPasswordResetForm(StyleFormMixin, PasswordResetForm):
+    pass
+class CustomPasswordConfirm(StyleFormMixin, SetPasswordForm):
+    pass
+
+class EditProfileForm(StyleFormMixin, forms.ModelForm):  
+
+    bio = forms.CharField(required=False, widget=forms.Textarea, label="Bio")
+    location = forms.CharField(required=False, widget=forms.TextInput, label="Location")
+    profile_image = forms.ImageField(required=False, label="Profile Image") 
+    profession = forms.CharField(required=False, widget=forms.TextInput, label="Profession")
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+    def __init__(self, *args, **kwargs):
+        self.userprofile = kwargs.pop('userprofile', None)
+        super().__init__(*args, **kwargs) 
+
+        if self.userprofile:
+            self.fields['bio'].initial = self.userprofile.bio 
+            self.fields['location'].initial = self.userprofile.location
+            self.fields['profession'].initial = self.userprofile.profession
+            self.fields['profile_image'].initial = self.userprofile.profile_image
+
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        
+        if self.userprofile:
+            self.userprofile.bio = self.cleaned_data.get('bio')
+            self.userprofile.location = self.cleaned_data.get('location')
+            self.userprofile.profession = self.cleaned_data.get('profession')
+            self.userprofile.profile_image = self.cleaned_data.get('profile_image')
+
+            if commit:
+                self.userprofile.save()
+        if commit:
+            user.save()
+
+        return user
+

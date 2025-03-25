@@ -8,16 +8,6 @@
         <form method="POST">
             {% csrf_token %}
 
-            {% comment %} <div class="mt-5">
-                <label for="">Name</label>
-                {{partici_form.name}}
-            </div> {% endcomment %}
-
-            {% comment %} <div class="mt-5">
-                <label for="">E-mail</label>
-                {{partici_form.email}}
-            </div> {% endcomment %}
-
             <div class="mt-5">
                 <label for="">Event</label><br>
                 {{partici_form.event}}

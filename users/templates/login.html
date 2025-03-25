@@ -7,27 +7,21 @@
     <div class="flex flex-col items-center justify-center">
         <h1 class="text-2xl font-bold m-5 text-green-900 font-serif">Welcome to Login</h1>
 
-        {% if messages %}        
-        <ul>
-            {% for message in messages %}
-            <li style="color:green;">{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
         <form action="{% url 'login' %}" method="POST" class="flex flex-col m-2">
             {% csrf_token %}
         
                 <input type="text" placeholder="Enter Your Username" name="username" class="border p-2 rounded m-2">
                 <input type="password" placeholder="Enter Your Password" name="password" class="border p-2 rounded m-2">            
                 
-
-             {% comment %} {{form.as_p}} {% endcomment %}
-
-            <button type="submit" class="bg-green-500 p-2 rounded-lg items-center text-center">Login</button>
+            <button type="submit" class="bg-orange-500 p-2 text-white rounded-lg items-center text-center">Login</button>
         </form>  
-
-        <a href="{% url 'signup' %}" class="bg-green-500 p-2 rounded-lg items-center text-center">Register</a>
+        <a href="{% url "reset_password" %}" class="">Forgot Password?</a>
+        <div class="flex gap-2">
+            <p class="">Don't have an account?</p>
+            <a href="{% url 'signup' %}" class="text-orange-500 font-bold">
+                Sign up
+            </a>
+        </div>
    
     </div>
     

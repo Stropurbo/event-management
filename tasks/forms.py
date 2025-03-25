@@ -3,8 +3,8 @@ from tasks.models import Category, Event
 from django.contrib.auth.models import User
 
 class StyleFormMixin:
-    default_class = "border to-black shadow-sm border-black focus:border-black focus:ring-black rounded-2xl w-full text-center "
-    default_style = "border: 1px solid black; text-align: center;  padding: 10px; text-align: center"
+    default_class = "border to-black shadow-sm border-black focus:border-black focus:ring-black rounded-xl w-80 m-2 text-center "
+    default_style = "border: 1px solid black; text-align: center;  padding: 10px; text-align: center;"
     default_margin = "border: 1px solid black; margin:10px; text-align: center"
 
     def applyStyle(self):
@@ -33,7 +33,7 @@ class StyleFormMixin:
             elif isinstance(field.widget, forms.PasswordInput):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f'Enter {label_lower}',
+                    'placeholder' : f'{label_lower}',
                     'style' : self.default_style
                 })
             elif isinstance(field.widget, forms.Textarea):

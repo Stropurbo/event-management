@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Update Profile{% endblock title %}
+
+{% block content %}
+<div class="m-5">
+
+  <h2 class="font-bold text-2xl p-3">Update Profile</h2>
+  
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="text-white font-bold bg-orange-500 rounded-lg p-2 mt-5">Save changes</button>
+  </form>
+
+</div>
+{% endblock %}
