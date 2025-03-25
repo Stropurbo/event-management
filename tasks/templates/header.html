@@ -39,7 +39,24 @@
                     class = "rounded-full p-2 bg-blue-500 text-white w-8 h-8 
                     flex items-center justify-center hover:bg-gray-700">   {% endcomment %}
 
-                    <a href="{% url 'profile' %}" class = "rounded-full p-2 bg-blue-500 text-white w-8 h-8 
+                    <a href="{% url 'profile' %}" 
+                    class="rounded-full text-white w-8 h-8 
+                    flex items-center justify-center hover:bg-gray-500">
+
+                        {% if user.userprofile.profile_image %}
+                            <img src="{{ user.userprofile.profile_image.url }}" alt="Profile Picture" 
+                                class="w-8 h-8 rounded-full object-cover">
+                        {% else %}
+                            <img src="https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png" 
+                                alt="User Avatar" 
+                                class="w-8 h-8 rounded-full object-cover">
+                        {% endif %}
+                    </a>
+
+
+
+                    {% comment %} <a href="{% url 'profile' %}" class = "rounded-full p-2 bg-blue-500
+                    text-white w-8 h-8 
                     flex items-center justify-center hover:bg-gray-700">
                         {% if user.is_authenticated %}
 
@@ -54,7 +71,7 @@
                         {% else %}
                         S                 
                         {% endif %}
-                    </a>                            
+                    </a>                             {% endcomment %}
                 {% comment %} </a>    {% endcomment %}
                 </div>
                                                      
