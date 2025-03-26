@@ -84,23 +84,23 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default=''),
-        'USER': config('DB_USER', default=''),
-        'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='', cast = int)
-    }
-}
-
 # DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.getenv("DB_URL"),
-#         conn_max_age=600
-#     )
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME', default=''),
+#         'USER': config('DB_USER', default=''),
+#         'PASSWORD': config('DB_PASSWORD', default=''),
+#         'HOST': config('DB_HOST', default='localhost'),
+#         'PORT': config('DB_PORT', default='', cast = int)
+#     }
 # }
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DB_URL'),
+        conn_max_age=600,
+    )
+}
 
 
 # Password validation
