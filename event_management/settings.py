@@ -85,20 +85,20 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default=''),
-        'USER': config('DB_USER', default=''),
-        'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='', cast = int)
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME', default=''),
+#         'USER': config('DB_USER', default=''),
+#         'PASSWORD': config('DB_PASSWORD', default=''),
+#         'HOST': config('DB_HOST', default='localhost'),
+#         'PORT': config('DB_PORT', default='', cast = int)
+#     }
+# }
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DB_URL'),
+        default="postgresql://event_management_db_fx9g_user:ZeyyDaIUSS6RToXG8AIe8yw8zzjO9hIM@dpg-cvi1vm1opnds73fpboa0-a.oregon-postgres.render.com/event_management_db_fx9g",
         conn_max_age=600
     )
 }
