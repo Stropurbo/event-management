@@ -5,14 +5,16 @@ from tasks.forms import EventModelForm, CategoryModelForm, ParticipantModelForm
 from django.db.models import Q, Count
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponse
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView,TemplateView,CreateView,DetailView
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 def is_manager(user):
     return user.groups.filter(name="Manager").exists()

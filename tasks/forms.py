@@ -1,6 +1,10 @@
 from django import forms
 from tasks.models import Category, Event
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 class StyleFormMixin:
     default_class = "border to-black shadow-sm border-black focus:border-black focus:ring-black rounded-xl w-80 m-2 text-center "

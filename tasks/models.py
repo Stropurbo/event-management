@@ -1,6 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
-# from django.conf import settings
+# from django.contrib.auth.models import User 
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -23,7 +26,7 @@ class Event(models.Model):
     ], default='UPCOMING', db_index=True)
 
     asset = models.ImageField(upload_to='event_asset', blank=True, null=True)
-    participants = models.ManyToManyField(User, related_name="rsvp_event", blank=True)
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="rsvp_event", blank=True)
 
     category = models.ForeignKey(
         Category, 

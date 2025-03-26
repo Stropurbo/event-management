@@ -20,8 +20,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000']
-
-
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Application definition
 
@@ -96,12 +95,12 @@ DATABASES = {
     }
 }
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DB_URL'),
-        conn_max_age=600
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv("DB_URL"),
+#         conn_max_age=600
+#     )
+# }
 
 
 # Password validation
@@ -162,4 +161,5 @@ FRONTEND_URL = 'http://127.0.0.1:8000'
 
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'
-# LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+
