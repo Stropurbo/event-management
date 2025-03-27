@@ -5,14 +5,16 @@ from tasks.forms import EventModelForm, CategoryModelForm, ParticipantModelForm
 from django.db.models import Q, Count
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponse
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView,TemplateView,CreateView,DetailView
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 def is_manager(user):
     return user.groups.filter(name="Manager").exists()
@@ -33,25 +35,25 @@ delete_event_decorator = [login_required, permission_required("tasks.delete_even
 delete_cat_decorator = [login_required, permission_required("tasks.delete_category", login_url="no_permission")]
 
 
-def home(request):
-    search_q = request.GET.get('search', '').strip()
+# def home(request):
+#     search_q = request.GET.get('search', '').strip()
 
-    if search_q:
-        all_event = Event.objects.filter(
-            Q(name__icontains = search_q) | Q(location__icontains=search_q)
-        )
-    else:
-        all_event = Event.objects.all()
+#     if search_q:
+#         all_event = Event.objects.filter(
+#             Q(name__icontains = search_q) | Q(location__icontains=search_q)
+#         )
+#     else:
+#         all_event = Event.objects.all()
 
-    all_event = all_event.annotate(join_count = Count('participants'))
-    cat = Category.objects.all()    
+#     all_event = all_event.annotate(join_count = Count('participants'))
+#     cat = Category.objects.all()    
     
-    context ={
-        "all_event" : all_event,
-        'cat' : cat,            
-        'search_q' : search_q
-    }
-    return render(request, 'home.html', context)
+#     context ={
+#         "all_event" : all_event,
+#         'cat' : cat,            
+#         'search_q' : search_q
+#     }
+#     return render(request, 'home.html', context)
 
 class Home(ListView):
     model = Event

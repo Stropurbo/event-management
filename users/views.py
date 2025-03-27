@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect,HttpResponse,get_object_or_404
 from users.forms import CustomRegisterForm,EditProfileForm, AssignRoleForm,CreateGroupForm,CustomChangePasswordForm,CustomPasswordResetForm,CustomPasswordConfirm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
-from django.contrib.auth.models import User,Group
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test,permission_required
 from django.db.models import Prefetch, Count, Q
@@ -16,8 +16,10 @@ from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
 from django.views.generic.edit import FormView
-from users.models import UserProfile
+from users.models import CustomUser
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 def is_manager(user):
     return "Manager" in [group.name for group in user.groups.all()]
@@ -371,6 +373,7 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         messages.success(self.request, "Password Reset Successfull")
         return super().form_valid(form)
 
+"""
 
 class EditProfileView(UpdateView):
     model = User
@@ -396,6 +399,22 @@ class EditProfileView(UpdateView):
     def form_valid(self, form):
         form.save(commit=True)
         return redirect('profile')
+"""
+
+class EditProfileView(UpdateView):
+    model = User
+    form_class = EditProfileForm
+    template_name = "accounts/profile_update.html"
+    context_object_name = 'form'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self):
+        return self.request.user
+    
+    def form_valid(self, form):
+        form.save()
+        return redirect('profile')
+
 
 class ProfileView(LoginRequiredMixin,TemplateView):
     template_name = "accounts/profile.html"
@@ -410,10 +429,11 @@ class ProfileView(LoginRequiredMixin,TemplateView):
         context['name'] = user.get_full_name()
         context['member_since'] = user.date_joined
         context['last_login'] = user.last_login
-        context['bio'] = user.userprofile.bio
-        context['location'] = user.userprofile.location
-        context['profession'] = user.userprofile.profession
-        context['profile_image'] = user.userprofile.profile_image
+        context['bio'] = user.bio
+        context['location'] = user.location
+        context['profession'] = user.profession
+        context['profile_image'] = user.profile_image
+        context['phone_number'] = user.phone_number
 
 
         return context

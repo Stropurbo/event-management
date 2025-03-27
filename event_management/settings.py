@@ -21,8 +21,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000']
 
-
-
+AUTH_USER_MODEL = 'users.CustomUser'
 # Application definition
 
 INSTALLED_APPS = [
@@ -98,8 +97,8 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://event_management_db_fx9g_user:ZeyyDaIUSS6RToXG8AIe8yw8zzjO9hIM@dpg-cvi1vm1opnds73fpboa0-a.oregon-postgres.render.com/event_management_db_fx9g",
-        conn_max_age=600
+        default="postgresql://event_manag_db_user:Hv3VgC1iaeF2Q22Ijt5FbdnkcOwc9smu@dpg-cvibv4qdbo4c738mk8j0-a.oregon-postgres.render.com/event_manag_db",
+        conn_max_age=600,
     )
 }
 
@@ -139,11 +138,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+STATICFILES_DIRS = [  BASE_DIR / 'static']
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -162,4 +164,5 @@ FRONTEND_URL = 'http://127.0.0.1:8000'
 
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'
-# LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+

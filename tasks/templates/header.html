@@ -43,8 +43,8 @@
                     class="rounded-full text-white w-8 h-8 
                     flex items-center justify-center hover:bg-gray-500">
 
-                        {% if user.userprofile.profile_image %}
-                            <img src="{{ user.userprofile.profile_image.url }}" alt="Profile Picture" 
+                        {% if profile_image %}
+                            <img src="{{ profile_image.url }}" alt="Profile Picture" 
                                 class="w-8 h-8 rounded-full object-cover">
                         {% else %}
                             <img src="https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png" 

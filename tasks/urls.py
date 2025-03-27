@@ -1,12 +1,12 @@
 from django.urls import path
 from debug_toolbar.toolbar import debug_toolbar_urls
-from tasks.views import home, create_event,CreateEvent,RSVP_EVENT,EventDetailsView,DashboardView,EventDetails,DeleteEvent,DeleteCategory,DeleteParticipant,CreateParticipant,CreateCategory,ShowCategory,UpdateEvent,Home ,create_category,delete_cat,delete_participant,rsvp_event, show_cat,create_participate,update_event,dashboard,delete_event,event_details,event_details_view
+from tasks.views import Home,CreateEvent,RSVP_EVENT,EventDetailsView,DashboardView,EventDetails,DeleteEvent,DeleteCategory,DeleteParticipant,CreateParticipant,CreateCategory,ShowCategory,UpdateEvent
 
 
 
 urlpatterns = [
     # path('home/', home, name="home"),
-    path('home/', Home.as_view(), name="home"),
+    path('', Home.as_view(), name="home"),
     # path('dashboard/', dashboard, name="dashboard"),
     path('dashboard/', DashboardView.as_view(), name="dashboard"),
     # path('create_event/', create_event, name= 'create_event'),
