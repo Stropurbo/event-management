@@ -75,16 +75,17 @@
             <div class="flex flex-col items-center w-auto ">
 
               {% if ev.asset %}
-              <div class="w-auto h-48 overflow-hidden flex justify-center rounded-lg">
-                  <img class="object-cover w-full h-full" src="{{ ev.asset.url }}" alt="Event Image">
-              </div>
-              {% else %}
-                  <div class="w-auto h-48 overflow-hidden flex justify-center">
-                      <img class="object-cover w-full h-full" 
-                          src="https://i.ibb.co.com/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" 
-                          alt="Default Event Image">
-                  </div>
-              {% endif %}    
+                <div class="w-auto h-48 overflow-hidden flex justify-center rounded-lg">
+                    <img class="object-cover w-full h-full" src="{{ ev.asset.url }}" alt="Event Image">
+                </div>
+            {% else %}
+                <div class="w-auto h-48 overflow-hidden flex justify-center">
+                    <img class="object-cover w-full h-full" 
+                        src="https://i.ibb.co.com/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" 
+                        alt="Default Event Image">
+                </div>
+            {% endif %}
+ 
                            
 
                 <h2 class="mt-5 text-center font-bold text-2xl"> {{ev.name}} </h2>
