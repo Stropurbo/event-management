@@ -17,7 +17,7 @@ class Event(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     date = models.DateField(db_index=True)
-    time = models.TimeField()
+    time = models.TimeField(auto_now=True)
     location = models.CharField(max_length=250)
     email = models.EmailField(unique=True, blank=True, null=True)
     status = models.CharField(max_length=30, choices= [
