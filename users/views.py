@@ -52,7 +52,7 @@ def Signup(request):
     return render(request, "register.html", {'form': form})
 
 class SignupView(FormView):
-    template_name = "register.html"
+    template_name = "registration/register.html"
     form_class = CustomRegisterForm
     success_url = reverse_lazy('login')
 
@@ -66,7 +66,6 @@ class SignupView(FormView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        print("Form Errors:", form.errors)  # Debugging: Print errors to the console
         messages.error(self.request, "Invalid form submission. Please check the details.")
         return super().form_invalid(form)
 
@@ -241,6 +240,8 @@ class GroupList(ListView):
 def group_list(request):
     groups = Group.objects.prefetch_related('permissions').all()
     return render(request, "admin/group_list.html", {'groups': groups})
+
+
 
 def no_permission(request):
     return render(request, "no_permission.html")
