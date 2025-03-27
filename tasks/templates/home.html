@@ -67,7 +67,7 @@
     <div class="listevent grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-5 w-auto">
       {% if all_event %}
       {% for ev in all_event %}     
-        <div class="eventcontent flex flex-wrap items-center 
+      <div class="eventcontent flex flex-wrap items-center 
         flex-col shadow-lg rounded-lg p-5 bg-red-500 w-auto"
         > 
           <a href="{% url 'event_details_view' id=ev.id %}" class="flex justify-center w-auto">
@@ -123,6 +123,7 @@
   
         </div>
       {% endfor %}
+      
       {% else %}
     
         <p class="flex justify-center items-center text-center text-gray-700 font-bold text-2xl m-5">No Events Found.</p>

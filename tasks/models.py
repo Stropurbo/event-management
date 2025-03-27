@@ -1,6 +1,6 @@
 from django.db import models
-# from django.contrib.auth.models import User 
 from django.conf import settings
+from users.models import CustomUser
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -17,7 +17,7 @@ class Event(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     date = models.DateField(db_index=True)
-    time = models.TimeField(auto_now=True)
+    time = models.TimeField()
     location = models.CharField(max_length=250)
     email = models.EmailField(unique=True, blank=True, null=True)
     status = models.CharField(max_length=30, choices= [
@@ -26,7 +26,12 @@ class Event(models.Model):
     ], default='UPCOMING', db_index=True)
 
     asset = models.ImageField(upload_to='event_asset', blank=True, null=True)
-    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="rsvp_event", blank=True)
+    
+    participants = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, 
+        related_name="rsvp_event", 
+        blank=True
+        )
 
     category = models.ForeignKey(
         Category, 
@@ -38,12 +43,3 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
-
-# class Participant(models.Model):
-#     name = models.CharField(max_length=200)
-#     email = models.EmailField(max_length=200)    
-#     event = models.ManyToManyField(Event, related_name='participants')
-
-#     def __str__(self):
-#         return self.name
-    

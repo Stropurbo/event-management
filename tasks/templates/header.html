@@ -43,7 +43,7 @@
                     class="rounded-full text-white w-8 h-8 
                     flex items-center justify-center hover:bg-gray-500">
 
-                        {% if user.userprofile.profile_image %}
+                        {% if profile_image %}
                             <img src="{{ user.userprofile.profile_image.url }}" alt="Profile Picture" 
                                 class="w-8 h-8 rounded-full object-cover">
                         {% else %}
