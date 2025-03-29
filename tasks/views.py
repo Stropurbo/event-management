@@ -571,6 +571,11 @@ class RSVP_EVENT(View):
 
         event = get_object_or_404(Event, id=event_id)
 
+        if not request.user.is_authenticated:
+            messages.error(request, "You have to login First")
+            return redirect('login')
+        
+
         if request.user in event.participants.all():
             messages.warning(request, "You have already in this event.")
         else:
