@@ -86,7 +86,7 @@ def login_view(request):
 
     return render(request, "login.html")
 
-class ActivateUser(View):
+class ActivateUser(View):   
     def get(self, request, user_id, token):
         try:
             user = User.objects.get(id = user_id)

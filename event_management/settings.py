@@ -77,12 +77,12 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -95,12 +95,13 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default="postgresql://event_manag_db_user:Hv3VgC1iaeF2Q22Ijt5FbdnkcOwc9smu@dpg-cvibv4qdbo4c738mk8j0-a.oregon-postgres.render.com/event_manag_db",
-        conn_max_age=600,
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv("DB_URL"),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
 
 
 # Password validation
@@ -147,8 +148,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
