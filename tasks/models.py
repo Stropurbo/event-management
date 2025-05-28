@@ -28,7 +28,7 @@ class Event(models.Model):
     asset = models.ImageField(upload_to='event_asset', blank=True, null=True)
     
     participants = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,   
         related_name="rsvp_event", 
         blank=True
         )
