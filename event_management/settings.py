@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000']
@@ -159,7 +159,12 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
-FRONTEND_URL = 'http://127.0.0.1:8000'
+# FRONTEND_URL = 'http://127.0.0.1:8000'
+
+SITE_DOMAIN = config("SITE_DOMAIN", default="127.0.0.1:8000")
+SITE_PROTOCOL = config("SITE_PROTOCOL", default="http")
+FRONTEND_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}"
+
 
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'
