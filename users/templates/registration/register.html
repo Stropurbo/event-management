@@ -3,63 +3,65 @@
 <title>{% block title %}Signup{% endblock title %}</title>
 {% block content %}
 
-    <div class="items-center justify-center p-5">
-        <div>       
-        <h1 class="text-2xl font-bold mb-5 text-center text-green-500">            
-            <div class="">
-                <div class="flex justify-center space-x-2 font-serif">
-                <div>Welcome to </div> <div class="text-red-900">Event</div>
-                </div>
-                <div class="text-red-900 font-serif">Management</div>
-                <div class="text-green-900 font-serif">Register</div>
-            </div>
-        </h1>
-    </div>
+<div class="items-center justify-center p-5">
+	<div>
+		<h1 class="text-2xl font-bold mb-5 text-center text-green-500">
+			<div class="">
+				<div class="flex justify-center space-x-2 font-serif">
+					<div>Welcome to</div>
+					<div class="text-red-900">Event</div>
+				</div>
+				<div class="text-red-900 font-serif">Management</div>
+				<div class="text-green-900 font-serif">Register</div>
+			</div>
+		</h1>
+	</div>
 
-    <div class="flex justify-center items-center">
-            <form action="" method="POST">
-                {% csrf_token %}
+	<div class="flex justify-center items-center">
+		<form
+			action=""
+			method="POST"
+		>
+			{% csrf_token %} {% if form.errors %}
+			<div class="text-red-600 mb-4">
+				<ul>
+					{% for field in form %} {% for error in field.errors %}
+					<li>{{ field.label }}: {{ error }}</li>
+					{% endfor %} {% endfor %} {% for error in form.non_field_errors %}
+					<li>{{ error }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
 
-                <div>
-                    {{form.username.label_tag}}
-                    {{form.username}}
-                </div>
+			<div>{{form.username.label_tag}} {{form.username}}</div>
 
-                <div>
-                    {{form.first_name.label_tag}}
-                    {{form.first_name}}
-                </div>
+			<div>{{form.first_name.label_tag}} {{form.first_name}}</div>
 
-                <div>
-                    {{form.last_name.label_tag}}
-                    {{form.last_name}}
-                </div>
+			<div>{{form.last_name.label_tag}} {{form.last_name}}</div>
 
-                <div>
-                    {{form.email.label_tag}}
-                    {{form.email}}                   
-                </div>
+			<div>{{form.email.label_tag}} {{form.email}}</div>
 
-                <div>
-                    {{form.password.label_tag}}
-                    {{form.password}}                    
-                </div>
+			<div>{{form.password.label_tag}} {{form.password}}</div>
 
-                <div>
-                    {{form.confirm_password.label_tag}}
-                    {{form.confirm_password}}                    
-                </div>
+			<div>{{form.confirm_password.label_tag}} {{form.confirm_password}}</div>
 
-                <button type="submit" class="bg-green-500 p-2 mt-5 flex justify-center w-full rounded-lg items-center text-center">
-                    Sign Up
-                </button>
-
-            </form>
-        
-        </div>
-        <p class="mt-4 text-gray-600 text-center">Already have an account?
-            <a href="{% url 'login' %}" class="text-green-500 font-semibold hover:underline">Login</a>
-        </p>    
-    </div>
+			<button
+				type="submit"
+				class="bg-green-500 p-2 mt-5 flex justify-center w-full rounded-lg items-center text-center"
+			>
+				Sign Up
+			</button>
+		</form>
+	</div>
+	<p class="mt-4 text-gray-600 text-center">
+		Already have an account?
+		<a
+			href="{% url 'login' %}"
+			class="text-green-500 font-semibold hover:underline"
+			>Login</a
+		>
+	</p>
+</div>
 
 {% endblock content %}

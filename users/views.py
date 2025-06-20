@@ -66,6 +66,7 @@ class SignupView(FormView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
+        print(form.errors)
         messages.error(self.request, "Invalid form submission. Please check the details.")
         return super().form_invalid(form)
 

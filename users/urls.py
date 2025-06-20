@@ -6,7 +6,9 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('activate/<int:user_id>/<str:token>', ActivateUser.as_view(), name='activate_user'),
+    
+    path('activate/<int:user_id>/<str:token>/', ActivateUser.as_view(), name='activate_user'),
+
     path('admin/dashboard/', AdminDashbaord.as_view(), name='admin-dashboard'),
     path('admin/<int:user_id>/assign_role/', AssignRole.as_view(), name='assign_role'),
     path('admin/create_group/', CreateGroup.as_view(), name='create_group'),
