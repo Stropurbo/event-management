@@ -93,7 +93,8 @@ class ActivateUser(View):
             if default_token_generator.check_token(user, token):
                 user.is_active = True
                 user.save() 
-                return redirect('login')
+                return render(request, 'login.html')
+                # return redirect('login')
             else:
                 return HttpResponse("Invalid ID")
             

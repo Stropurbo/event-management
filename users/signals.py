@@ -17,7 +17,7 @@ def send_activation_mail(sender, instance, created, **kwargs):
 
         subject = "Activate Your Account"
         message = f'Hi {instance.username}, \n\nPlease activate your account by click this link below:\n\n{activation_url}\n\nThank You!'
-        recipient_list = {instance.email}
+        recipient_list = [instance.email]
 
         try:
             send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
