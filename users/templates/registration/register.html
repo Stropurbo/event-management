@@ -22,7 +22,9 @@
 			action=""
 			method="POST"
 		>
-			{% csrf_token %} {% if form.errors %}
+			{% csrf_token %} 
+			
+			{% if form.errors %}
 			<div class="text-red-600 mb-4">
 				<ul>
 					{% for field in form %} {% for error in field.errors %}
