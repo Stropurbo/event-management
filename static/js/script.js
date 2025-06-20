@@ -1,67 +1,143 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const catdropdown = document.getElementById("categoryDropdown");
-    const catlist = document.getElementById("categoryList");
+// document.addEventListener("DOMContentLoaded", function() {
+//     const catdropdown = document.getElementById("categoryDropdown");
+//     const catlist = document.getElementById("categoryList");
 
-    catdropdown.addEventListener("click", function(){
-        catlist.classList.toggle('hidden')
-    });
+//     catdropdown.addEventListener("click", function(){
+//         catlist.classList.toggle('hidden')
+//     });
 
-    document.querySelectorAll(".catItem").forEach(item => {
-        item.addEventListener("click", function(){
-            selectItem.textContent = this.textContent;
-            catlist.classList.add('hidden')
-        });
-    });
+//     document.querySelectorAll(".catItem").forEach(item => {
+//         item.addEventListener("click", function(){
+//             selectItem.textContent = this.textContent;
+//             catlist.classList.add('hidden')
+//         });
+//     });
 
-    document.addEventListener("click", function(event){
-        if(!catdropdown.contains(event.target)){
-            catlist.classList.add('hidden')
-        }
-    })
+//     document.addEventListener("click", function(event){
+//         if(!catdropdown.contains(event.target)){
+//             catlist.classList.add('hidden')
+//         }
+//     })
 
-});
+// });
 
-document.getElementById("menu-toggle").addEventListener('click', function(){
-    document.getElementById('menu').classList.toggle('hidden');
-});
+// document.getElementById("menu-toggle").addEventListener('click', function(){
+//     document.getElementById('menu').classList.toggle('hidden');
+// });
     
-setTimeout(function() {
-    var alert = document.querySelector('.alert-container');
-    if(alert){
-        alert.style.display = 'none';
-    }
-}, 2000 )
+// setTimeout(function() {
+//     var alert = document.querySelector('.alert-container');
+//     if(alert){
+//         alert.style.display = 'none';
+//     }
+// }, 2000 )
 
-   // ata user icon a click korle logout r dashboard show hobe 
-    document
-    .getElementById("menu-toggle")
-    .addEventListener("click", function () {
-        document.getElementById("mobile-menu").classList.toggle("hidden");
-    });
+//    // ata user icon a click korle logout r dashboard show hobe 
+//     document
+//     .getElementById("menu-toggle")
+//     .addEventListener("click", function () {
+//         document.getElementById("mobile-menu").classList.toggle("hidden");
+//     });
 
-    document
-    .getElementById("user-menu-button")
-    .addEventListener("click", function () {
-        document.getElementById("user-menu").classList.toggle("hidden");
-    });
+//     document
+//     .getElementById("user-menu-button")
+//     .addEventListener("click", function () {
+//         document.getElementById("user-menu").classList.toggle("hidden");
+//     });
 
 
-    window.addEventListener("click", function (e) {
-    if (!document.getElementById("user-menu-button").contains(e.target)) {
-        document.getElementById("user-menu").classList.add("hidden");
-    }
-    });
+//     window.addEventListener("click", function (e) {
+//     if (!document.getElementById("user-menu-button").contains(e.target)) {
+//         document.getElementById("user-menu").classList.add("hidden");
+//     }
+//     });
 
-// ata category er jonno
+// // ata category er jonno
 
-    document.getElementById("category-text")
-    .addEventListener("click", function () {
-        document.getElementById("cat-list").classList.toggle("hidden");
-    });
+//     document.getElementById("category-text")
+//     .addEventListener("click", function () {
+//         document.getElementById("cat-list").classList.toggle("hidden");
+//     });
 
-    window.addEventListener("click", function (e) {
-        if (!document.getElementById("category-text").contains(e.target)) {
-            document.getElementById("cat-list").classList.add("hidden");
-        }
-    });
+//     window.addEventListener("click", function (e) {
+//         if (!document.getElementById("category-text").contains(e.target)) {
+//             document.getElementById("cat-list").classList.add("hidden");
+//         }
+//     });
      
+document.addEventListener('DOMContentLoaded', function () {
+	const catdropdown = document.getElementById('categoryDropdown')
+	const catlist = document.getElementById('categoryList')
+
+	if (catdropdown && catlist) {
+		catdropdown.addEventListener('click', function () {
+			catlist.classList.toggle('hidden')
+		})
+	}
+
+	document.querySelectorAll('.catItem').forEach((item) => {
+		item.addEventListener('click', function () {
+			selectItem.textContent = this.textContent
+			if (catlist) catlist.classList.add('hidden')
+		})
+	})
+
+	document.addEventListener('click', function (event) {
+		if (catdropdown && !catdropdown.contains(event.target)) {
+			catlist.classList.add('hidden')
+		}
+	})
+
+	// All others inside DOMContentLoaded with null checks:
+
+	const menuToggle = document.getElementById('menu-toggle')
+	const menu = document.getElementById('menu')
+	if (menuToggle && menu) {
+		menuToggle.addEventListener('click', function () {
+			menu.classList.toggle('hidden')
+		})
+	}
+
+	const mobileMenuToggle = document.getElementById('menu-toggle')
+	const mobileMenu = document.getElementById('mobile-menu')
+	if (mobileMenuToggle && mobileMenu) {
+		mobileMenuToggle.addEventListener('click', function () {
+			mobileMenu.classList.toggle('hidden')
+		})
+	}
+
+	const userMenuBtn = document.getElementById('user-menu-button')
+	const userMenu = document.getElementById('user-menu')
+	if (userMenuBtn && userMenu) {
+		userMenuBtn.addEventListener('click', function () {
+			userMenu.classList.toggle('hidden')
+		})
+
+		window.addEventListener('click', function (e) {
+			if (!userMenuBtn.contains(e.target)) {
+				userMenu.classList.add('hidden')
+			}
+		})
+	}
+
+	const categoryText = document.getElementById('category-text')
+	const catListAlt = document.getElementById('cat-list')
+	if (categoryText && catListAlt) {
+		categoryText.addEventListener('click', function () {
+			catListAlt.classList.toggle('hidden')
+		})
+
+		window.addEventListener('click', function (e) {
+			if (!categoryText.contains(e.target)) {
+				catListAlt.classList.add('hidden')
+			}
+		})
+	}
+
+	setTimeout(function () {
+		var alert = document.querySelector('.alert-container')
+		if (alert) {
+			alert.style.display = 'none'
+		}
+	}, 2000)
+})
