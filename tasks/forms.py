@@ -75,7 +75,7 @@ class EventModelForm(StyleFormMixin, forms.ModelForm):
             'location' : forms.TextInput(attrs={'required' : True}),
             'category' : forms.RadioSelect(attrs={'required' : True}),
             'status' : forms.Select(attrs={'required' : True}),
-            'asset' : forms.ClearableFileInput(attrs={'required' : True}),
+            # 'asset' : forms.ClearableFileInput(attrs={'required' : True}),
             'participants' : forms.CheckboxSelectMultiple()
         }
         labels = {

@@ -58,4 +58,27 @@ window.addEventListener('click', function (e) {
 })
 
 /////////////
+const prevBtn = document.querySelector('.pre-btn');
+const nextBtn = document.querySelector('.nxt-btn');
+const container = document.querySelector('.pevent-container'); // This is your scrollable container
 
+const firstCard = document.querySelector('.pevent-card');
+let scrollAmount = 0;
+if (firstCard) {
+    const cardStyle = getComputedStyle(firstCard);
+    const cardWidth = firstCard.offsetWidth; 
+    const cardMarginRight = parseInt(cardStyle.marginRight); 
+    scrollAmount = cardWidth + cardMarginRight + 10; 
+} else {
+    scrollAmount = 300; 
+}
+
+// Add event listener for the previous button
+prevBtn.addEventListener('click', () => {
+    container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+});
+
+// Add event listener for the next button
+nextBtn.addEventListener('click', () => {
+    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+});
