@@ -69,8 +69,13 @@ class EventModelForm(StyleFormMixin, forms.ModelForm):
         model = Event
         fields = ['name','description','date','location','category','status', 'asset', 'participants']
         widgets = {
-            'date' : forms.SelectDateWidget,
-            'category' : forms.RadioSelect,
+            'name' : forms.TextInput(attrs={'required' : True}),
+            'description' : forms.Textarea(attrs={'required' : True}),        
+            'date' : forms.SelectDateWidget(attrs={'required' : True}),
+            'location' : forms.TextInput(attrs={'required' : True}),
+            'category' : forms.RadioSelect(attrs={'required' : True}),
+            'status' : forms.Select(attrs={'required' : True}),
+            'asset' : forms.ClearableFileInput(attrs={'required' : True}),
             'participants' : forms.CheckboxSelectMultiple()
         }
         labels = {

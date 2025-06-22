@@ -65,49 +65,49 @@
 //         }
 //     });
      
+
+
+
+/////////////
+
 document.addEventListener('DOMContentLoaded', function () {
 	const catdropdown = document.getElementById('categoryDropdown')
 	const catlist = document.getElementById('categoryList')
+	const selectItem = document.getElementById('category-text')
 
 	if (catdropdown && catlist) {
 		catdropdown.addEventListener('click', function () {
 			catlist.classList.toggle('hidden')
 		})
-	}
 
-	document.querySelectorAll('.catItem').forEach((item) => {
-		item.addEventListener('click', function () {
-			selectItem.textContent = this.textContent
-			if (catlist) catlist.classList.add('hidden')
+		document.querySelectorAll('.catItem').forEach((item) => {
+			item.addEventListener('click', function () {
+				if (selectItem) {
+					selectItem.textContent = this.textContent
+				}
+				catlist.classList.add('hidden')
+			})
 		})
-	})
 
-	document.addEventListener('click', function (event) {
-		if (catdropdown && !catdropdown.contains(event.target)) {
-			catlist.classList.add('hidden')
-		}
-	})
-
-	// All others inside DOMContentLoaded with null checks:
+		document.addEventListener('click', function (event) {
+			if (!catdropdown.contains(event.target)) {
+				catlist.classList.add('hidden')
+			}
+		})
+	}
 
 	const menuToggle = document.getElementById('menu-toggle')
 	const menu = document.getElementById('menu')
+
 	if (menuToggle && menu) {
 		menuToggle.addEventListener('click', function () {
 			menu.classList.toggle('hidden')
 		})
 	}
 
-	const mobileMenuToggle = document.getElementById('menu-toggle')
-	const mobileMenu = document.getElementById('mobile-menu')
-	if (mobileMenuToggle && mobileMenu) {
-		mobileMenuToggle.addEventListener('click', function () {
-			mobileMenu.classList.toggle('hidden')
-		})
-	}
-
 	const userMenuBtn = document.getElementById('user-menu-button')
 	const userMenu = document.getElementById('user-menu')
+
 	if (userMenuBtn && userMenu) {
 		userMenuBtn.addEventListener('click', function () {
 			userMenu.classList.toggle('hidden')
@@ -120,20 +120,19 @@ document.addEventListener('DOMContentLoaded', function () {
 		})
 	}
 
-	const categoryText = document.getElementById('category-text')
-	const catListAlt = document.getElementById('cat-list')
-	if (categoryText && catListAlt) {
-		categoryText.addEventListener('click', function () {
-			catListAlt.classList.toggle('hidden')
+	if (selectItem && catlist) {
+		selectItem.addEventListener('click', function () {
+			catlist.classList.toggle('hidden')
 		})
 
 		window.addEventListener('click', function (e) {
-			if (!categoryText.contains(e.target)) {
-				catListAlt.classList.add('hidden')
+			if (!selectItem.contains(e.target)) {
+				catlist.classList.add('hidden')
 			}
 		})
 	}
 
+	// Alert timeout
 	setTimeout(function () {
 		var alert = document.querySelector('.alert-container')
 		if (alert) {
