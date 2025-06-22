@@ -109,48 +109,6 @@ class CustomPasswordResetForm(StyleFormMixin, PasswordResetForm):
 class CustomPasswordConfirm(StyleFormMixin, SetPasswordForm):
     pass
 
-"""
-class EditProfileForm(StyleFormMixin, forms.ModelForm):  
-
-    bio = forms.CharField(required=False, widget=forms.Textarea, label="Bio")
-    location = forms.CharField(required=False, widget=forms.TextInput, label="Location")
-    profile_image = forms.ImageField(required=False, label="Profile Image") 
-    profession = forms.CharField(required=False, widget=forms.TextInput, label="Profession")
-
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email']
-
-    def __init__(self, *args, **kwargs):
-        self.userprofile = kwargs.pop('userprofile', None)
-        super().__init__(*args, **kwargs) 
-
-        if self.userprofile:
-            self.fields['bio'].initial = self.userprofile.bio 
-            self.fields['location'].initial = self.userprofile.location
-            self.fields['profession'].initial = self.userprofile.profession
-            self.fields['profile_image'].initial = self.userprofile.profile_image
-
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        
-        if self.userprofile:
-            self.userprofile.bio = self.cleaned_data.get('bio')
-            self.userprofile.location = self.cleaned_data.get('location')
-            self.userprofile.profession = self.cleaned_data.get('profession')
-            self.userprofile.profile_image = self.cleaned_data.get('profile_image')
-
-            if commit:
-                self.userprofile.save()
-        if commit:
-            user.save()
-
-        return user
-    
-"""
-
-
 class EditProfileForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = CustomUser

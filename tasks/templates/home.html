@@ -5,8 +5,8 @@
  {% block content %}
 
   <main class="overflow-x-hidden">
-    <div class="relative mt-5">
-      <div class="imagecontainer flex mt-5 items-center">
+    <div class="relative">
+      <div class="imagecontainer flex items-center">
         <img class="bannerimage w-full" src="https://i.ibb.co.com/kgMRsmnN/travelling-Banner-Landscape.png" alt="banner">
         <div class="sabbiroverlay text-yellow-500 flex-col md:flex-row items-center 
         justify-center absolute top-1/2 left-1/2 
@@ -21,32 +21,29 @@
       </div>
     </div>
     
-    <div class="imagecontainer flex relative w-full">
-      <img class="w-full" 
-      src="https://i.ibb.co.com/Kpf8n71Z/special-offer-bg.png" 
-      alt="images" srcset=""
-      >
-      <div class="findevent absolute flex md:flex-row flex-col 
-        justify-between w-full items-center"
+    <div class="flex items-center w-full bg-red-500 p-5">
+      
+      <div class="w-full flex justify-between"
         >      
-          <div class="text-white font-medium text-xl">
-            FIND THE BEST EVENTS
-            
+          <div class="text-white text-2xl font-bold flex items-center">
+            <p>
+              FIND THE BEST EVENTS
+            </p>            
           </div>               
                   
-          <div class="search-container w-full max-w-screen-lg mx-auto">
+          <div class="search-container">
             <form action="{% url 'home' %}" method="GET" 
             class="flex md:flex-row flex-col sm:justify-center sm:items-center md:flex-nowrap 
                space-y-3 sm:space-y-3 md:space-y-0 md:space-x-3 items-center">
               
                 <input type="text" name="search" placeholder="Events names, locations" 
-                class="w-32 border p-2 rounded-lg" 
+                class="w-64 border p-2 rounded-lg" 
                 >
               
                 <select name = "category" class="select border p-2 rounded-lg" id="categoryDropdown">
                     <option value="" class="selected">Category</option>
                       {% for category in cat %}
-                      <option class="catItem"> {{category.name}} </option>
+                      <option value="{{ category.id }}" class="catItem"> {{category.name}} </option>
                       {% endfor %}
                 </select>                                  
                 
@@ -54,8 +51,7 @@
                   class="searchname bg-gray-600 p-2 rounded-lg flex items-center justify-center font-bold
                   text-white hover:bg-gradient-to-r hover:from-orange-500 to-red-500">
                     SEARCH
-                </button>
-                
+                </button>                
 
             </form>
           </div>         
@@ -64,11 +60,11 @@
       
     </div>
 
-    <div class="listevent grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-5 w-auto">
+    <div class="listevent grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-5 w-auto p-5">
       {% if all_event %}
       {% for ev in all_event %}     
       <div class="eventcontent flex flex-wrap items-center 
-        flex-col shadow-lg rounded-lg p-5 bg-red-500 w-auto"
+        flex-col shadow-lg rounded-lg p-5 bg-red-500 w-auto "
         > 
           <a href="{% url 'event_details_view' id=ev.id %}" class="flex justify-center w-auto">
             
@@ -133,6 +129,102 @@
 
 
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-5">      
+
+        <div class="card bg-base-100 p-5">
+          <figure class="flex justify-center h-24">
+            <img
+              src="https://i.ibb.co/CKYhLMTf/img-icons8.png"
+              alt="Image" />
+          </figure>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mt-2 text-2xl font-bold">7/24 Event avaliable</h2>
+            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+            <div class="card-actions justify-end">
+              <div class="flex justify-center m-2">
+                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
+                  Details
+                </button>
+              </div>              
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 p-5">
+          <figure class="flex justify-center h-24">
+            <img
+              src="https://i.ibb.co/k2vLdYwj/img-icons8.png"
+              alt="Image" />
+          </figure>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mt-2 text-2xl font-bold">Great Locations </h2>
+            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+            <div class="card-actions justify-end">
+              <div class="flex justify-center m-2">
+                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
+                  Details
+                </button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 p-5">
+          <figure class="flex justify-center h-24">
+            <img
+              src="https://i.ibb.co/kgmQbDzf/img-icons8.png"
+              alt="Image" 
+              />
+          </figure>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mt-2 text-2xl font-bold">More Then 200 Speakers</h2>
+            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+            <div class="card-actions justify-end">
+              <div class="flex justify-center m-2">
+                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
+                  Details
+                </button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 p-5">
+          <figure class="flex justify-center h-24">
+            <img
+              src="https://i.ibb.co/Rpp49MJG/img-icons8.png"
+              alt="Image" />
+          </figure>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title mt-2 text-2xl font-bold">Lets Party After Event</h2>
+            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+            <div class="card-actions justify-end">
+              <div class="flex justify-center m-2">
+                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
+                  Details
+                </button>
+              </div>
+              
+            </div>
+          </div>
+        </div>     
+
+    
+
+    </div>
+
+
+      <div class="p-5 flex items-center space-x-2">
+        <span class="text-2xl font-bold">HOTELS</span>
+        <span class="font-normal text-2xl">/ don't forget to book your room</span>
+      </div>
+
+      
+        
+
     
   </main>
 

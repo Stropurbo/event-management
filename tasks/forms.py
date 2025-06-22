@@ -7,9 +7,9 @@ User = get_user_model()
 
 
 class StyleFormMixin:
-    default_class = "border to-black shadow-sm border-black focus:border-black focus:ring-black rounded-xl w-80 m-2 text-center "
-    default_style = "border: 1px solid black; text-align: center;  padding: 10px; text-align: center;"
-    default_margin = "border: 1px solid black; margin:10px; text-align: center"
+    default_class = "border to-gray shadow-sm border-gray focus:border-gray focus:ring-black rounded-xl w-80 m-2 text-center "
+    default_style = "text-align: center;  padding: 10px; text-align: center;"
+    default_margin = "margin:10px; text-align: center"
 
     def applyStyle(self):
         for key, field in self.fields.items():
