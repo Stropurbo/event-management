@@ -36,9 +36,23 @@ document.getElementById('menu-toggle').addEventListener('click', function () {
 	document.getElementById('mobile-menu').classList.toggle('hidden')
 })
 
-document.getElementById('user-menu-button').addEventListener('click', function () {
-	document.getElementById('user-menu').classList.toggle('hidden')
+// document.getElementById('user-menu-button').addEventListener('click', function () {
+// 	document.getElementById('user-menu').classList.toggle('hidden')
+// })
+
+document.addEventListener('DOMContentLoaded', function () {
+	const button = document.getElementById('user-menu-button')
+	const menu = document.getElementById('user-menu')
+
+	if (button && menu) {
+		button.addEventListener('click', function () {
+			menu.classList.toggle('hidden')
+		})
+	} else {
+		console.warn('user-menu-button or user-menu not found in the DOM.')
+	}
 })
+  
 
 window.addEventListener('click', function (e) {
 	if (!document.getElementById('user-menu-button').contains(e.target)) {

@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from tasks.models import Event, Category
@@ -125,8 +126,6 @@ class ShowCategory(TemplateView):
         context = super().get_context_data(**kwargs)
         context['cat'] = Category.objects.all()
         return context
-
-
 @method_decorator(create_cat_decorator, name="dispatch")
 class CreateCategory(CreateView):
     model = Category
@@ -377,5 +376,9 @@ def rsvp_event(request, event_id):
         messages.success(request, "Congratulations, You have Successfully Enrolled this Event.")
 
     return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+
+class AboutEventPage(TemplateView):
+    template_name = "about.html"
 
     

@@ -27,22 +27,22 @@
 
     <main>
 
-         {% if messages %}
-            <div class="flex justify-center p-5">
-                <ul>
-                    {% for message in messages %}
-                    <script>
-                        Swal.fire({
-                            title: "Hey!",
-                            text: "{{ message }}",
-                            icon: "success",                            
-                          });
-                    </script>
-                        
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+        {% if messages %}
+        <div class="flex justify-center p-5">
+          <ul>
+            {% for message in messages %}
+              <script>
+                Swal.fire({
+                  title: "Hey!",
+                  text: "{{ message|escapejs }}",
+                  icon: "{% if 'error' in message.tags %}error{% elif 'warning' in message.tags %}warning{% elif 'info' in message.tags %}info{% else %}success{% endif %}"
+                });
+              </script>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      
 
 
         {% block content %}

@@ -1,6 +1,6 @@
 from django.urls import path
 from debug_toolbar.toolbar import debug_toolbar_urls
-from tasks.views import Home,CreateEvent,RSVP_EVENT,EventDetailsView,DashboardView,EventDetails,DeleteEvent,DeleteCategory,DeleteParticipant,CreateParticipant,CreateCategory,ShowCategory,UpdateEvent
+from tasks.views import AboutEventPage, Home,CreateEvent,RSVP_EVENT,EventDetailsView,DashboardView,EventDetails,DeleteEvent,DeleteCategory,DeleteParticipant,CreateParticipant,CreateCategory,ShowCategory,UpdateEvent
 
 
 
@@ -18,5 +18,6 @@ urlpatterns = [
     path('events/', EventDetails.as_view(), name='event_details'),
     path('event<int:id>/event_detail/', EventDetailsView.as_view(), name='event_details_view'),
     path('rsvp<int:event_id>/', RSVP_EVENT.as_view(), name='rsvp_event'),
+    path('about/', AboutEventPage.as_view(), name='about'),
 
 ] + debug_toolbar_urls()    

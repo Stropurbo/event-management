@@ -1,91 +1,200 @@
 {% load static %}
 
-        <header class="flex justify-between h-[50px] items-center py-5 px-5 md:flex-row flex-col">
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>SEvent</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+	</head>
+	<body class="pt-16">
+		<!-- padding top added for fixed navbar -->
 
-            <div class="flex justify-center items-center h-full">
-                <a href="{% url 'home' %}" class="flex md:flex-row items-center space-x-2">
-                    <img src="{% static 'images/elogo.png' %}" alt="logo" width="30" height="20">
-                    <div>
-                    <div class="font-bold text-lg mx-2 font-serif">SEvent</div>
-                    
-                    </div>                
-                </a>
-            </div>
-                
-            <div class="bg-white md:h-fit w-auto md:w-auto left-0 top-[9%] flex items-center px-5">
-                <ul id="menu" class="flex flex-col gap-5 md:flex-row md:gap-5 md:items-center">
+		<header class="bg-orange-500 shadow-md fixed w-full z-50 top-0">
+			<div
+				class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
+			>
+				<!-- Logo -->
+				<div class="flex items-center">
+					<a
+						href="{% url 'home' %}"
+						class="flex items-center space-x-2"
+					>
+						<!-- <img src="{% static 'images/elogo.png' %}" alt="logo" class="w-8 h-8 object-contain" /> -->
+						<span
+							class="font-bold text-2xl font-serif bg-gradient-to-r from-white to-black bg-clip-text text-transparent"
+						>
+							Sevent
+						</span>
+					</a>
+				</div>
 
-                <li><a class="hover:text-gray-500" href="{% url "home" %}">Home</a></li>
+				<!-- Menu Toggle (Mobile) -->
+				<div class="md:hidden">
+					<button
+						id="menu-toggle"
+						class="text-gray-700 focus:outline-none"
+					>
+						<svg
+							class="w-6 h-6"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							viewBox="0 0 24 24"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M4 6h16M4 12h16M4 18h16"
+							/>
+						</svg>
+					</button>
+				</div>
 
-                {% if user.is_authenticated and user.is_staff %}
-                <li><a class="hover:text-gray-500" href="{% url "dashboard" %}">Dashboard</a></li>
-                {% endif %}
+				<!-- Menu Items -->
+				<nav
+					id="menu"
+					class="hidden md:flex items-center space-x-6"
+				>
+					<a
+						href="{% url 'home' %}"
+						class="text-gray-700 hover:text-blue-600"
+						>Home</a
+					>
 
-                {% if user.is_authenticated and user.groups.all.0.name == "Manager" %}
-                <li><a class="hover:text-gray-500" href="{% url "admin_event" %}">Dashboard</a></li>
-                {% endif %}
+					{% if user.is_authenticated and user.is_staff %}
+					<a
+						href="{% url 'dashboard' %}"
+						class="text-gray-700 hover:text-blue-600"
+						>Dashboard</a
+					>
+					{% elif user.is_authenticated and user.groups.all.0.name == "Manager" %}
+					<a
+						href="{% url 'admin_event' %}"
+						class="text-gray-700 hover:text-blue-600"
+						>Dashboard</a
+					>
+					{% elif user.is_authenticated and user.groups.all.0.name == "User" %}
+					<a
+						href="{% url 'user_dash' %}"
+						class="text-gray-700 hover:text-blue-600"
+						>Dashboard</a
+					>
+					{% endif %}
 
-                {% if user.is_authenticated and user.groups.all.0.name == "User" %}
-                <li><a class="hover:text-gray-500" href="{% url "user_dash" %}">Dashboard</a></li>
-                {% endif %}
-                
-                <li><a class="hover:text-gray-500" href="{% url "home" %}">Events</a></li>
-                <li><a class="hover:text-gray-500" href="{% url "home" %}">About</a></li>
+					<a
+						href="{% url 'home' %}"
+						class="text-gray-700 hover:text-blue-600"
+						>Events</a
+					>
+					<a
+						href="{% url 'about' %}"
+						class="text-gray-700 hover:text-blue-600"
+						>About</a
+					>
 
-                <div>
-                    {% comment %} <a href="{% if user.is_authenticated %} 
-                    {% url "logout" %}
-                    {% else %}
-                    {% url "signup" %}              
-                    {% endif %}" 
-                    class = "rounded-full p-2 bg-blue-500 text-white w-8 h-8 
-                    flex items-center justify-center hover:bg-gray-700">   {% endcomment %}
+					<!-- Profile Image -->
+					<a
+						href="{% url 'profile' %}"
+						class="w-8 h-8 rounded-full overflow-hidden border-2 border-blue-500 flex-shrink-0"
+					>
+						{% if profile_image %}
+						<img
+							src="{{ profile_image.url }}"
+							alt="Profile"
+							class="w-8 h-8 object-cover"
+						/>
+						{% else %}
+						<img
+							src="https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png"
+							alt="User Avatar"
+							class="w-8 h-8 object-cover"
+						/>
+						{% endif %}
+					</a>
+				</nav>
+			</div>
 
-                    <a href="{% url 'profile' %}" 
-                    class="rounded-full text-white w-8 h-8 
-                    flex items-center justify-center hover:bg-gray-500">
+			<!-- Mobile Menu Items -->
+			<div
+				id="mobile-menu"
+				class="md:hidden hidden absolute top-16 left-0 w-full z-40 bg-white border-t shadow"
+			>
+				<ul class="flex flex-col items-start space-y-4 pt-4 px-4 pb-4">
+					<li>
+						<a
+							href="{% url 'home' %}"
+							class="block text-gray-700 hover:text-blue-600 text-base"
+							>Home</a
+						>
+					</li>
+					{% if user.is_authenticated and user.is_staff %}
+					<li>
+						<a
+							href="{% url 'dashboard' %}"
+							class="block text-gray-700 hover:text-blue-600 text-base"
+							>Dashboard</a
+						>
+					</li>
+					{% elif user.is_authenticated and user.groups.all.0.name == "Manager" %}
+					<li>
+						<a
+							href="{% url 'admin_event' %}"
+							class="block text-gray-700 hover:text-blue-600 text-base"
+							>Dashboard</a
+						>
+					</li>
+					{% elif user.is_authenticated and user.groups.all.0.name == "User" %}
+					<li>
+						<a
+							href="{% url 'user_dash' %}"
+							class="block text-gray-700 hover:text-blue-600 text-base"
+							>Dashboard</a
+						>
+					</li>
+					{% endif %}
+					<li>
+						<a
+							href="{% url 'home' %}"
+							class="block text-gray-700 hover:text-blue-600 text-base"
+							>Events</a
+						>
+					</li>
+					<li>
+						<a
+							href="{% url 'home' %}"
+							class="block text-gray-700 hover:text-blue-600 text-base"
+							>About</a
+						>
+					</li>
+					<li>
+						<a
+							href="{% url 'profile' %}"
+							class="flex items-center space-x-3"
+						>
+							<img
+								src="{% if profile_image %}{{ profile_image.url }}{% else %}https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png{% endif %}"
+								alt="Profile"
+								class="w-8 h-8 min-w-8 min-h-8 flex-shrink-0 rounded-full object-cover border-2 border-blue-500"
+							/>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</header>
 
-                        {% if profile_image %}
-                            <img src="{{ profile_image.url }}" alt="Profile Picture" 
-                                class="w-8 h-8 rounded-full object-cover">
-                        {% else %}
-                            <img src="https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png" 
-                                alt="User Avatar" 
-                                class="w-8 h-8 rounded-full object-cover">
-                        {% endif %}
-                    </a>
+		<!-- Mobile Menu Toggle Script -->
+		<script>
+			const menuToggle = document.getElementById('menu-toggle')
+			const mobileMenu = document.getElementById('mobile-menu')
 
-
-
-                    {% comment %} <a href="{% url 'profile' %}" class = "rounded-full p-2 bg-blue-500
-                    text-white w-8 h-8 
-                    flex items-center justify-center hover:bg-gray-700">
-                        {% if user.is_authenticated %}
-
-                        {% if user.groups.all.0.name == "Admin" %}
-                            A
-                        {% elif user.groups.all.0.name == "Manager" %}
-                            M
-                        {% else %}
-                            U
-                        {% endif %}
-                        
-                        {% else %}
-                        S                 
-                        {% endif %}
-                    </a>                             {% endcomment %}
-                {% comment %} </a>    {% endcomment %}
-                </div>
-                                                     
-                </ul>           
-            </div> 
-            <div id="menu-toggle" class="sm:hidden p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
-                </svg>
-            </div> 
-                        
-        </header>
-    
-
-
+			menuToggle.addEventListener('click', () => {
+				mobileMenu.classList.toggle('hidden')
+			})
+		</script>
+		<script
+			src="{% static 'js/script.js' %}"
+			defer
+		></script>
+	</body>
+</html>

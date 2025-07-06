@@ -1,242 +1,152 @@
 {% extends "base.html" %}
-
 <title>{% block title %}Home{% endblock title %}</title>
 
- {% block content %}
+{% block content %}
+<main class="overflow-x-hidden">
+  <!-- Banner Section -->
+  <div class="relative w-full">
+    <img class="w-full h-auto object-cover" src="https://i.ibb.co.com/kgMRsmnN/travelling-Banner-Landscape.png" alt="banner">
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-yellow-500 space-y-2 px-2">
+      <p class="text-xl md:text-3xl font-roboto">One Stop</p>
+      <p class="text-lg md:text-2xl font-poppins font-medium">Event Planner</p>
+      <p class="text-sm font-light">E V E R Y C H O I C E B E P E R F E C T</p>
+    </div>
+  </div>
 
-  <main class="overflow-x-hidden">
-    <div class="relative">
-      <div class="imagecontainer flex items-center">
-        <img class="bannerimage w-full" src="https://i.ibb.co.com/kgMRsmnN/travelling-Banner-Landscape.png" alt="banner">
-        <div class="sabbiroverlay text-yellow-500 flex-col md:flex-row items-center 
-        justify-center absolute top-1/2 left-1/2 
-        transform -translate-x-1/2 -translate-y-1/2 
-        text-center"
-        >
-          <p class="font-roboto">One Stop</p>
-          <p class="font-poppins" style="font-weight: 500;">Event Planner</p>
-          <p class="font-light">E V E R Y C H O I C E B E P E R F E C T</p>
+  <!-- Search Section -->
+  <div class="w-full bg-red-500 py-6 px-4 md:px-10">
+    <div class="w-full flex flex-col md:flex-row items-center justify-between max-w-full mx-auto">
+      <h2 class="text-white text-2xl font-bold text-center md:text-left mb-4 md:mb-0">FIND THE BEST EVENTS</h2>
+      <form action="{% url 'home' %}" method="GET" class="flex flex-col md:flex-row items-center gap-3">
+        <input type="text" name="search" placeholder="Events names, locations" class="w-64 border p-2 rounded-lg">
+        <select name="category" class="border p-2 rounded-lg">
+          <option value="">Category</option>
+          {% for category in cat %}
+          <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="bg-gray-600 p-2 rounded-lg text-white font-bold hover:bg-gradient-to-r hover:from-orange-500 to-red-500">SEARCH</button>
+      </form>
+    </div>
+  </div>
+  
+
+  <!-- Events Section -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 py-6 w-full max-w-full mx-auto">
+    {% if all_event %}
+      {% for ev in all_event %}
+      <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col justify-between">
+        <a href="{% url 'event_details_view' id=ev.id %}">
+          <div class="h-48 overflow-hidden rounded">
+            <img src="{{ ev.asset.url|default:'https://i.ibb.co/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg' }}" class="object-cover w-full h-full" alt="Event">
+          </div>
+          <h2 class="text-xl font-bold mt-3 text-center">{{ ev.name }}</h2>
+          <p class="text-gray-700 mt-2 text-center line-clamp-2">{{ ev.description }}</p>
+          <p class="text-purple-600 font-semibold mt-1 text-center">{{ ev.date }} - {{ ev.time }}</p>
+        </a>
+        <div class="flex justify-between items-center mt-4 text-sm text-gray-700">
+          <span>Category: <strong>{{ ev.category.name }}</strong></span>
+          <span>Joined: <strong>{{ ev.participants.count }}</strong></span>
         </div>
-        
+        <form method="POST" action="{% url 'rsvp_event' ev.id %}" class="mt-4">
+          {% csrf_token %}
+          <button class="bg-orange-500 text-white w-full rounded py-2 hover:bg-gray-600 transition duration-300">RSVP</button>
+        </form>
       </div>
-    </div>
-    
-    <div class="flex items-center w-full bg-red-500 p-5">
-      
-      <div class="w-full flex justify-between"
-        >      
-          <div class="text-white text-2xl font-bold flex items-center">
-            <p>
-              FIND THE BEST EVENTS
-            </p>            
-          </div>               
-                  
-          <div class="search-container">
-            <form action="{% url 'home' %}" method="GET" 
-            class="flex md:flex-row flex-col sm:justify-center sm:items-center md:flex-nowrap 
-               space-y-3 sm:space-y-3 md:space-y-0 md:space-x-3 items-center">
-              
-                <input type="text" name="search" placeholder="Events names, locations" 
-                class="w-64 border p-2 rounded-lg" 
-                >
-              
-                <select name = "category" class="select border p-2 rounded-lg" id="categoryDropdown">
-                    <option value="" class="selected">Category</option>
-                      {% for category in cat %}
-                      <option value="{{ category.id }}" class="catItem"> {{category.name}} </option>
-                      {% endfor %}
-                </select>                                  
-                
-                <button type="submit" 
-                  class="searchname bg-gray-600 p-2 rounded-lg flex items-center justify-center font-bold
-                  text-white hover:bg-gradient-to-r hover:from-orange-500 to-red-500">
-                    SEARCH
-                </button>                
+      {% endfor %}
+    {% else %}
+      <p class="text-center text-gray-700 font-bold text-2xl">No Events Found.</p>
+    {% endif %}
+  </div>
+  
 
-            </form>
-          </div>         
-      
-      </div>
-      
-    </div>
+  <!-- See All Events -->
+  <div class="flex justify-center p-5">
+    <button class="px-4 h-10 rounded-lg font-bold bg-orange-500 text-white hover:bg-gray-500">SEE ALL EVENTS</button>
+  </div>
 
-    <div class="listevent grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-1 gap-5 w-auto mx-5 h-[550px]">
-      {% if all_event %}
-      {% for ev in all_event %}     
-      <div class="eventcontent flex flex-wrap items-center 
-        flex-col shadow-lg rounded-lg p-5 bg-red-500 w-auto "
-        > 
-          <a href="{% url 'event_details_view' id=ev.id %}" class="flex justify-center w-auto">
-            
-            <div class="flex flex-col items-center w-auto ">
-
-              {% if ev.asset %}
-                <div class="w-auto h-48 overflow-hidden flex justify-center rounded-lg">
-                    <img class="object-cover w-full h-full" src="{{ ev.asset.url }}" alt="Event Image">
-                </div>
-            {% else %}
-                <div class="w-auto h-48 overflow-hidden flex justify-center">
-                    <img class="object-cover w-full h-full" 
-                        src="https://i.ibb.co.com/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" 
-                        alt="Default Event Image">
-                </div>
-            {% endif %}
- 
-                           
-
-                <h2 class="mt-5 text-center font-bold text-2xl"> {{ev.name}} </h2>
-                <p class="mt-5 text-center line-clamp-2"> {{ev.description}} </p>
-                <p class="mt-2 text-purple-500 font-bold text-center"> {{ev.date}} - {{ev.time}} </p>
-            </div>
-          </a>
-        
-          <div class="w-auto flex md:flex-row flex-col justify-between items-center mt-3">      
-
-            <div class="mx-5  font-bold text-gray-600">
-              Category
-              <p class="text-center font-bold text-black"> {{ev.category.name}} </p>
-            </div>
-
-            <div class="mx-5  font-bold text-gray-600">
-              Joined
-              <p class="text-center font-bold text-black"> {{ev.participants.count}} </p>
-            </div>  
-            
-            {% comment %} 
-            <a href="{% url 'rsvp_event' ev.id %}" 
-            class=" bg-orange-500 rounded-2xl w-[100px] h-10 flex items-center justify-center 
-            font-bold text-center text-white font-sans 
-            hover:bg-gray-500"
-            >
-                RSVP
-            </a> 
-            {% endcomment %}
-            <form action="{% url "rsvp_event" ev.id %}" method="POST">
-              {% csrf_token %}
-              <button type="submit" class=" bg-orange-500 rounded-2xl w-[100px] h-10 flex items-center justify-center 
-              font-bold text-center text-white font-sans 
-              hover:bg-gray-500">RSVP</button>
-            </form>
-          </div>  
-        </div>
-      {% endfor %}      
-      {% else %}
-    
-        <p class="flex justify-center items-center text-center text-gray-700 font-bold text-2xl m-5">No Events Found.          
-        </p>      
-      {% endif %}    
-    </div>
-    
-    <div class="flex justify-center p-5">
-      <button class="px-4 h-10 rounded-lg font-bold bg-orange-500 text-white hover:bg-gray-500">
-        SEE ALL EVENTS
-      </button>
-    </div>
-
-    <!-- 24/7 time active-->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-5">      
-
-        <div class="card bg-base-100 p-5">
-          <figure class="flex justify-center h-24">
-            <img
-              src="https://i.ibb.co/CKYhLMTf/img-icons8.png"
-              alt="Image" />
-          </figure>
-          <div class="card-body items-center text-center">
-            <h2 class="card-title mt-2 text-2xl font-bold">7/24 Event avaliable</h2>
-            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
-            <div class="card-actions justify-end">
-              <div class="flex justify-center m-2">
-                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
-                  Details
-                </button>
-              </div>              
-            </div>
-          </div>
-        </div>
-
-        <div class="card bg-base-100 p-5">
-          <figure class="flex justify-center h-24">
-            <img
-              src="https://i.ibb.co/k2vLdYwj/img-icons8.png"
-              alt="Image" />
-          </figure>
-          <div class="card-body items-center text-center">
-            <h2 class="card-title mt-2 text-2xl font-bold">Great Locations </h2>
-            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
-            <div class="card-actions justify-end">
-              <div class="flex justify-center m-2">
-                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
-                  Details
-                </button>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <div class="card bg-base-100 p-5">
-          <figure class="flex justify-center h-24">
-            <img
-              src="https://i.ibb.co/kgmQbDzf/img-icons8.png"
-              alt="Image" 
-              />
-          </figure>
-          <div class="card-body items-center text-center">
-            <h2 class="card-title mt-2 text-2xl font-bold">More Then 200 Speakers</h2>
-            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
-            <div class="card-actions justify-end">
-              <div class="flex justify-center m-2">
-                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
-                  Details
-                </button>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <div class="card bg-base-100 p-5">
-          <figure class="flex justify-center h-24">
-            <img
-              src="https://i.ibb.co/Rpp49MJG/img-icons8.png"
-              alt="Image" />
-          </figure>
-          <div class="card-body items-center text-center">
-            <h2 class="card-title mt-2 text-2xl font-bold">Lets Party After Event</h2>
-            <p class="m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
-            <div class="card-actions justify-end">
-              <div class="flex justify-center m-2">
-                <button class="border p-5 rounded-md h-10 text-center items-center flex hover:bg-gray-200">
-                  Details
-                </button>
-              </div>
-              
-            </div>
-          </div>
-        </div>     
-
-    
-
-    </div>
-
-
-      <div class="px-5 flex items-center space-x-2 justify-between">
-        <div>
-          <span class="text-2xl font-bold">HOTELS</span>
-          <span class="font-normal text-2xl">/ don't forget to book your room</span>
-        </div>
-
-        <div class="space-x-5">
-          <button class="pre-btn rounded-full">
-            <img src="https://i.ibb.co/GfMMDTdb/img-icons8.png" alt="Prev" class="w-5 h-5">
-          </button>
-        
-          <button class="nxt-btn bg-white rounded-full">
-            <img src="https://i.ibb.co/hx5Jxb8h/img-icons8.png" alt="Next" class="w-5 h-5">
+  <!-- Features Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-5 w-full max-w-screen-full mx-auto">
+    <div class="card bg-base-100 p-5 shadow rounded">
+      <figure class="flex justify-center h-24">
+        <img src="https://i.ibb.co/CKYhLMTf/img-icons8.png" alt="Image" class="max-h-full" />
+      </figure>
+      <div class="card-body items-center text-center">
+        <h2 class="card-title mt-2 text-2xl font-bold">7/24 Event available</h2>
+        <p class="m-3 text-sm md:text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+        <div class="card-actions justify-center">
+          <button class="border px-6 py-2 rounded-md text-center hover:bg-gray-200 transition">
+            Details
           </button>
         </div>
       </div>
+    </div>
+  
+    <div class="card bg-base-100 p-5 shadow rounded">
+      <figure class="flex justify-center h-24">
+        <img src="https://i.ibb.co/k2vLdYwj/img-icons8.png" alt="Image" class="max-h-full" />
+      </figure>
+      <div class="card-body items-center text-center">
+        <h2 class="card-title mt-2 text-2xl font-bold">Great Locations</h2>
+        <p class="m-3 text-sm md:text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+        <div class="card-actions justify-center">
+          <button class="border px-6 py-2 rounded-md text-center hover:bg-gray-200 transition">
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="card bg-base-100 p-5 shadow rounded">
+      <figure class="flex justify-center h-24">
+        <img src="https://i.ibb.co/kgmQbDzf/img-icons8.png" alt="Image" class="max-h-full" />
+      </figure>
+      <div class="card-body items-center text-center">
+        <h2 class="card-title mt-2 text-2xl font-bold">More Than 200 Speakers</h2>
+        <p class="m-3 text-sm md:text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+        <div class="card-actions justify-center">
+          <button class="border px-6 py-2 rounded-md text-center hover:bg-gray-200 transition">
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="card bg-base-100 p-5 shadow rounded">
+      <figure class="flex justify-center h-24">
+        <img src="https://i.ibb.co/Rpp49MJG/img-icons8.png" alt="Image" class="max-h-full" />
+      </figure>
+      <div class="card-body items-center text-center">
+        <h2 class="card-title mt-2 text-2xl font-bold">Let's Party After Event</h2>
+        <p class="m-3 text-sm md:text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit</p>
+        <div class="card-actions justify-center">
+          <button class="border px-6 py-2 rounded-md text-center hover:bg-gray-200 transition">
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Hotels Section -->
+  <div class="px-5 max-w-screen-full mx-auto">
+    <div class="flex justify-between items-center mb-4 text-sm md:text-2xl">
+      <div class="text-left">
+        <span class="font-bold">HOTELS</span>
+        <span class="font-normal">/ don't forget to book your room</span>
+      </div>
+      <div class="flex flex-nowrap space-x-3 md:space-x-5 items-center">
+        <button class="pre-btn rounded-full p-2 md:p-3 hover:bg-gray-200 transition">
+          <img src="https://i.ibb.co/GfMMDTdb/img-icons8.png" alt="Prev" class="w-4 h-4 md:w-5 md:h-5" />
+        </button>
+        <button class="nxt-btn bg-white rounded-full p-2 md:p-3 hover:bg-gray-200 transition">
+          <img src="https://i.ibb.co/hx5Jxb8h/img-icons8.png" alt="Next" class="w-4 h-4 md:w-5 md:h-5" />
+        </button>
+      </div>
+    </div>
+  </div>
+  
+
 
   <section class="pevent p-5 ">  
     <div class="pevent-container flex flex-nowrap gap-5 overflow-x-auto scroll-smooth ">
@@ -525,32 +435,300 @@
   </section>
 
 
+  <script>
+    const prevBtn = document.querySelector('.pre-btn');
+    const nextBtn = document.querySelector('.nxt-btn');
+    const container = document.querySelector('.pevent-container');
+    const scrollAmount = 700;
+    prevBtn.addEventListener('click', () => container.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+    nextBtn.addEventListener('click', () => container.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+  </script>
+</main>
+{% endblock content %}
 
+  <section class="pevent p-5 ">  
+    <div class="pevent-container flex flex-nowrap gap-5 overflow-x-auto scroll-smooth ">
+      <!-- Card 1 -->
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
 
-
-  
-    <script>
-      const prevBtn = document.querySelector('.pre-btn');
-      const nextBtn = document.querySelector('.nxt-btn');
-      const container = document.querySelector('.pevent-container');
-
-      const scrollAmount = 400;
-
-      prevBtn.addEventListener('click', () => {
-        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-      });
-
-      nextBtn.addEventListener('click', () => {
-        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      });   
-
-
-    </script>
-
-      
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
         
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 1</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
 
-    
-  </main>
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
 
-  {% endblock content %}
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 2</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 3</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 4</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 5</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 6</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 7</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 8</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 9</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pevent-card min-w-[256px] md:w-96 bg-white shadow-lg rounded-lg p-3 group ">
+
+        <div class="pevent-image relative flex items-center justify-center overflow-hidden rounded group">
+          <img src="https://i.ibb.co/v40TZnGs/unnamed.webp" alt="" 
+            class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110">
+        
+        </div>
+        
+        <div class="pevent-info mt-2">
+          <h2 class="font-bold text-lg text-center line-clamp-1">Standard Hotel Room 10</h2>
+          <p class="text-center p-2"> 
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+            <i class="fas fa-star text-yellow-500"></i>
+         </p>
+          <p class="text-sm text-gray-600 text-center line-clamp-2">Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development.
+          </p>
+
+          <div class="flex justify-center p-2">
+            <button class="border border-orange-500 rounded-md hover:bg-gray-500 w-20 p-2">
+              Book
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
