@@ -146,3 +146,19 @@
     width: 400px;
     background: white;
 }
+
+
+
+.pevent-container {
+    overflow-x: auto;  /* হরাইজন্টাল স্ক্রল সক্রিয় */
+    scroll-behavior: smooth; /* smooth স্ক্রলিং */
+    display: flex;
+    gap: 1.25rem; /* Tailwind এর space-x-5 */
+    -webkit-overflow-scrolling: touch; /* মোবাইলে smooth স্ক্রল */
+    scrollbar-width: none; /* Firefox এ scrollbar লুকানো */
+  }
+  
+  .pevent-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari এ scrollbar লুকানো */
+  }
+  

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg-white min-h-screen font-sans py-10">
+  <div class="max-w-screen mx-auto px-4">   
+
+    {% if all_events_page %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-5">
+      {% for ev in all_events_page %}
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition duration-300 flex flex-col">
+        <img
+          src="{{ ev.asset.url|default:'http://127.0.0.1:8000/media/event_asset/Untitled-desig.png' }}"
+          alt="Event Image"
+          class="w-full h-48 object-cover"
+        >
+        <div class= "p-5 flex-1 flex flex-col justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800 mb-2">{{ ev.name }}</h2>
+            <p class="text-gray-600 text-sm mb-3 max-h-16 overflow-hidden">
+              {{ ev.description }}
+            </p>
+            <p class="text-sm text-purple-600 font-semibold">
+              {{ ev.date }} {{ ev.time }}
+            </p>
+            <p class="text-sm text-gray-500">Location: {{ ev.location }}</p>
+            <p class="text-sm text-gray-500">Joined: {{ ev.participants.count }}</p>
+          </div>
+          <a href="{% url 'event_details_view' id=ev.id %}"
+             class="mt-4 inline-block bg-orange-500 text-white text-center px-4 py-2 rounded-md hover:bg-gray-500 transition w-full">
+            View
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-gray-500 text-lg mt-10">No events found.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

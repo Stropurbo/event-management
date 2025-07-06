@@ -12,4 +12,5 @@ urlpatterns = [
     path('', Home.as_view(), name='home'),  
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
+if settings.DEBUG or True:  
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

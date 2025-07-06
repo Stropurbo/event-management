@@ -381,4 +381,10 @@ def rsvp_event(request, event_id):
 class AboutEventPage(TemplateView):
     template_name = "about.html"
 
+class AllEventView(TemplateView):
+    template_name = "event.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["all_events_page"] = Event.objects.all()
+        return context
     

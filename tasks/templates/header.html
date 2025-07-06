@@ -58,38 +58,38 @@
 				>
 					<a
 						href="{% url 'home' %}"
-						class="text-gray-700 hover:text-blue-600"
+						class="text-gray-700 hover:text-white"
 						>Home</a
 					>
 
 					{% if user.is_authenticated and user.is_staff %}
 					<a
 						href="{% url 'dashboard' %}"
-						class="text-gray-700 hover:text-blue-600"
+						class="text-gray-700 hover:text-white"
 						>Dashboard</a
 					>
 					{% elif user.is_authenticated and user.groups.all.0.name == "Manager" %}
 					<a
 						href="{% url 'admin_event' %}"
-						class="text-gray-700 hover:text-blue-600"
+						class="text-gray-700 hover:text-white"
 						>Dashboard</a
 					>
 					{% elif user.is_authenticated and user.groups.all.0.name == "User" %}
 					<a
 						href="{% url 'user_dash' %}"
-						class="text-gray-700 hover:text-blue-600"
+						class="text-gray-700 hover:text-white"
 						>Dashboard</a
 					>
 					{% endif %}
 
 					<a
-						href="{% url 'home' %}"
-						class="text-gray-700 hover:text-blue-600"
+						href="{% url 'all_events' %}"
+						class="text-gray-700 hover:text-white"
 						>Events</a
 					>
 					<a
 						href="{% url 'about' %}"
-						class="text-gray-700 hover:text-blue-600"
+						class="text-gray-700 hover:text-white"
 						>About</a
 					>
 

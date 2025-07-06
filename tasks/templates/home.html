@@ -38,8 +38,15 @@
       <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col justify-between">
         <a href="{% url 'event_details_view' id=ev.id %}">
           <div class="h-48 overflow-hidden rounded">
-            <img src="{{ ev.asset.url|default:'https://i.ibb.co/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg' }}" class="object-cover w-full h-full" alt="Event">
+            {% if ev.asset %}
+              <img src="{{ ev.asset.url |default:'http://127.0.0.1:8000/media/event_asset/Untitled-desig.png'}}" 
+              class="object-cover w-full h-full" alt="Event">
+            {% else %}
+              <img src="https://i.ibb.co/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" class="object-cover w-full h-full" alt="Event">
+            {% endif %}
           </div>
+          
+          
           <h2 class="text-xl font-bold mt-3 text-center">{{ ev.name }}</h2>
           <p class="text-gray-700 mt-2 text-center line-clamp-2">{{ ev.description }}</p>
           <p class="text-purple-600 font-semibold mt-1 text-center">{{ ev.date }} - {{ ev.time }}</p>

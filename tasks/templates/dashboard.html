@@ -11,27 +11,25 @@
     <script src="{% static 'js/script.js' %}"></script>
 
 </head>
-<body class = "m-8 bg-zinc-100">
+<body class = "bg-zinc-100">
 
-    <header>
-
-        <div class= "flex justify-between">
+    <header class="p-4 bg-white shadow-md  mb-5">
+        <div class= "flex justify-between items-center bg-white">          
             <div>
-                
-            <a href="{% url "dashboard" %}" class = "font-bold p-2 text-xl">
-                Dashboard
-            </a>
-            <a href="{% url "home" %}" class = "font-bold p-2 text-xl text-green-500">
-                Home
-            </a>
-            </div>         
+                <a href="{% url "dashboard" %}" class = "font-bold p-2 text-xl">
+                    Dashboard
+                </a>
+                <a href="{% url "home" %}" class = "p-2 text-sm ">
+                    Home
+                </a> 
+            </div>                   
             
-            <div class = "flex items-center gap-3">
-                <a href="{% url "admin-dashboard" %}" class="createevent p-2 bg-green-500 text-black rounded-lg">Manager Dashboard</a>
-                <a href="{% url "create_event" %}" class="createevent p-2 bg-green-500 text-black rounded-lg">Create Event</a>
-                <a href="{% url "partici_form" %}" class="createevent p-2 bg-green-500 text-black rounded-lg">Add Participate</a>
+            <div class = "flex items-center">
+                <a href="{% url "admin-dashboard" %}" class="createevent p-2  text-black rounded-lg">Manager Dashboard</a>
+                <a href="{% url "create_event" %}" class="createevent p-2  text-black rounded-lg">Create Event</a>
+                <a href="{% url "partici_form" %}" class="createevent p-2 text-black rounded-lg">Add Participate</a>
 
-                <div class="dropdown rounded-lg bg-green-500">                                       
+                <div class="dropdown rounded-lg ">                                       
                     <button id="categoryDropdown" class="createevent">Category</button>                      
                     <div id="categoryList" class="content hidden">
                         <a href="{% url 'category_form' %}" class="catItem">Create</a>
@@ -60,10 +58,7 @@
 
 
             </div>  
-            
-            
-        </div>
-        
+        </div>        
     </header>
     
     <main>
@@ -78,39 +73,32 @@
             </div>
         {% endif %}
 
-        <div class = "mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div class = "mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-5">
 
-            <div class="totalevent flex items-center justify-between bg-white p-5 rounded-xl shadow-sm">
+            <div class="totalevent flex items-center justify-between shadow-md bg-red-100 p-5 rounded-xl hover:bg-red-200 hover:text-red-800 transition duration-300">
                 <div>
                     <h5 class="mb-2 font-bold text-gray-500">Total Event</h5>
                     <p class="font-bold text-2xl"> {{event_count.total}} </p>
-                </div>
-                <div>
-                    
-                </div>
+                </div>            
             </div>
             
-            <div class="upcomingevent flex items-center justify-between bg-white p-5 rounded-xl shadow-sm">
+            <div class="upcomingevent flex items-center justify-between bg-blue-100 p-5 rounded-xl shadow-md hover:bg-blue-200 hover:text-blue-800 transition duration-300">
                 <div>
                     <h5 class="mb-2 font-bold text-gray-500">Upcoming Events</h5>
                     <p class="font-bold text-2xl"> {{event_count.upcoming}} </p>
                 </div>
-                <div>
-                    
-                </div>
+                
             </div>
 
-            <div class="completdevent flex items-center justify-between bg-white p-5 rounded-xl shadow-sm">
+            <div class="completdevent flex items-center justify-between bg-green-100 p-5 rounded-xl shadow-md hover:bg-green-200 hover:text-green-800 transition duration-300">
                 <div>
                     <h5 class="mb-2 font-bold text-gray-500">Completed Events</h5>
                     <p class="font-bold text-2xl"> {{event_count.completed}} </p>
                 </div>
-                <div>
-                    
-                </div>
+                
             </div>
 
-            <div class="todayevent flex items-center justify-between bg-white p-5 rounded-xl shadow-sm">
+            <div class="todayevent flex items-center justify-between bg-yellow-100 p-5 rounded-xl shadow-md hover:bg-yellow-200 hover:text-yellow-800 transition duration-300">
                 <div>
                     <h5 class="mb-2 font-bold text-gray-500">Today Events</h5>
                     <p class="font-bold text-2xl"> {{event_count.today_event}} </p>
@@ -120,25 +108,22 @@
                 </div>
             </div>
 
-            <div class="pastevent flex items-center justify-between bg-white p-5 rounded-xl shadow-sm">
+            <div class="pastevent flex items-center justify-between bg-indigo-100 p-5 rounded-xl shadow-md hover:bg-indigo-200 hover:text-indigo-800 transition duration-300">
                 <div>
                     <h5 class="mb-2 font-bold text-gray-500">Past Events</h5>
                     <p class="font-bold text-2xl"> {{event_count.past_event}} </p>
                 </div>
-                <div>
-                    
-                </div>
+                
             </div>
 
 
-            <div class="pastevent flex items-center justify-between bg-white p-5 rounded-xl shadow-sm">
+            <div class="pastevent flex items-center justify-between bg-pink-100 p-5 rounded-xl shadow-md
+            hover:bg-pink-200 hover:text-pink-800 transition duration-300">
                 <div>
                     <h5 class="mb-2 font-bold text-gray-500">Total Participants</h5>
                     <p class="font-bold text-2xl"> {{total_participate}} </p>
                 </div>
-                <div>
-                    
-                </div>
+                
             </div>
         </div>
 
