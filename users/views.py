@@ -434,7 +434,7 @@ class ProfileView(LoginRequiredMixin,TemplateView):
         context['bio'] = user.bio
         context['location'] = user.location
         context['profession'] = user.profession
-        context['profile_image'] = user.profile_image
+        # context['profile_image'] = user.profile_image
         context['phone_number'] = user.phone_number
 
 

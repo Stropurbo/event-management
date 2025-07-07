@@ -61,6 +61,7 @@ class Home(ListView):
         context['cat'] = Category.objects.all()
         return context
 
+
 @method_decorator(create_decorators, name="dispatch")
 class CreateEvent(View):
     event_html = "create_event.html"
