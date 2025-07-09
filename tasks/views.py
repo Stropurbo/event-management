@@ -1,8 +1,8 @@
 from urllib import request
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from tasks.models import Event, Category
-from tasks.forms import EventModelForm, CategoryModelForm, ParticipantModelForm
+from tasks.models import Event, Category, Speaker
+from tasks.forms import EventModelForm, CategoryModelForm, ParticipantModelForm, SpeakerForm
 from django.db.models import Q, Count
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.views import View
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView,TemplateView,CreateView,DetailView
+from django.views.generic import ListView,TemplateView,CreateView,DetailView,DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 
@@ -61,7 +61,6 @@ class Home(ListView):
         context['cat'] = Category.objects.all()
         return context
 
-
 @method_decorator(create_decorators, name="dispatch")
 class CreateEvent(View):
     event_html = "create_event.html"
@@ -74,7 +73,6 @@ class CreateEvent(View):
         }
 
         return render(request, self.event_html, context)
-
 
     def post(self, request, *args, **kwargs):
         event_form = EventModelForm(request.POST, request.FILES)        
@@ -92,6 +90,8 @@ class CreateEvent(View):
             return redirect('admin_event') 
         else:
             return redirect('delete_cat') 
+
+
         
 @method_decorator(update_decorators, name="dispatch")
 class UpdateEvent(View):
@@ -119,6 +119,46 @@ class UpdateEvent(View):
             return redirect('admin_event')
         else:
             return redirect('home')
+
+# class CreateSpeaker(View):
+#     template_name  = "speaker.html"
+
+#     def get(self, request, *args, **kwargs):
+#         speaker_forom = SpeakerForm()
+
+#         context = {
+#         "create_speaker": speaker_forom  
+#         }        
+#         return render(request, self.template_name, context)
+    
+#     def post(self, request, *args, **kwargs):
+#         speaker_form = SpeakerForm(request.POST, request.FILES)
+        
+#         if speaker_form.is_valid():
+#             speaker_form.save()            
+#             return redirect('dashboard')
+
+class CreateSpeaker(CreateView):
+    model = Speaker
+    form_class = SpeakerForm
+    template_name = "speaker.html"
+    success_url = "dashboard"
+
+class DeleteSpeaker(View):
+    template_name = "delete_speaker.html"
+
+    def get(self, request, *args, **kwargs):
+        speakers = Speaker.objects.all()
+        return render(request, self.template_name, {'speaker': speakers})
+
+    def post(self, request, *args, **kwargs):
+        select_speaker = request.POST.getlist('speaker')
+        
+        for speaker_id in select_speaker:
+            speaker = get_object_or_404(Speaker, id=speaker_id)
+            speaker.delete()
+
+        return redirect('dashboard')
 
 class ShowCategory(TemplateView):
     template_name = "delete_cat.html"

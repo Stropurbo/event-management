@@ -11,7 +11,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
 class Event(models.Model):
     
     name = models.CharField(max_length=200)
@@ -39,7 +38,15 @@ class Event(models.Model):
         default=1,
         db_index=True
         )
-   
 
     def __str__(self):
         return self.name
+    
+class Speaker(models.Model):
+    name = models.CharField(max_length=200)
+    title = models.CharField(max_length=250)
+    image = models.ImageField(upload_to='speaker_image', blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    

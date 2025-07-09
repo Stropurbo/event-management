@@ -8,9 +8,18 @@
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 	<body class="pt-16">
-		<!-- padding top added for fixed navbar -->
+		<div
+			id="loader"
+			class="fixed inset-0 bg-white flex items-center justify-center z-50"
+		>
+			<div
+				class="w-12 h-12 border-4 border-black border-dashed rounded-full animate-spin"
+			></div>
+		</div>
 
-		<header class="bg-white shadow-md fixed w-full z-50 top-0">
+		<header
+			class="bg-white/70 backdrop-blur-md shadow-lg fixed w-full z-50 top-0 transition-all duration-300"
+		>
 			<div
 				class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16"
 			>
@@ -22,7 +31,7 @@
 					>
 						<!-- <img src="{% static 'images/elogo.png' %}" alt="logo" class="w-8 h-8 object-contain" /> -->
 						<span
-							class="font-bold text-2xl font-serif bg-gradient-to-r from-white to-black bg-clip-text text-transparent"
+							class="font-bold text-2xl font-serif bg-gradient-to-r from-red-600 to-orange-900 bg-clip-text text-transparent transition duration-300 group-hover:scale-105"
 						>
 							Sevent
 						</span>
@@ -54,49 +63,49 @@
 				<!-- Menu Items -->
 				<nav
 					id="menu"
-					class="hidden md:flex items-center space-x-6"
+					class="hidden md:flex items-center space-x-6 text-base font-medium"
 				>
 					<a
 						href="{% url 'home' %}"
-						class="text-gray-700 hover:text-white"
+						class="text-gray-700 hover:text-red-500"
 						>Home</a
 					>
 
 					{% if user.is_authenticated and user.is_staff %}
 					<a
 						href="{% url 'dashboard' %}"
-						class="text-gray-700 hover:text-white"
+						class="text-gray-700 hover:text-red-500"
 						>Dashboard</a
 					>
 					{% elif user.is_authenticated and user.groups.all.0.name == "Manager" %}
 					<a
 						href="{% url 'admin_event' %}"
-						class="text-gray-700 hover:text-white"
+						class="text-gray-700 hover:text-red-500"
 						>Dashboard</a
 					>
 					{% elif user.is_authenticated and user.groups.all.0.name == "User" %}
 					<a
 						href="{% url 'user_dash' %}"
-						class="text-gray-700 hover:text-white"
+						class="text-gray-700 hover:text-red-500"
 						>Dashboard</a
 					>
 					{% endif %}
 
 					<a
 						href="{% url 'all_events' %}"
-						class="text-gray-700 hover:text-white"
+						class="text-gray-700 hover:text-red-500"
 						>Events</a
 					>
 					<a
 						href="{% url 'about' %}"
-						class="text-gray-700 hover:text-white"
+						class="text-gray-700 hover:text-red-500"
 						>About</a
 					>
 
 					<!-- Profile Image -->
 					<a
 						href="{% url 'profile' %}"
-						class="w-8 h-8 rounded-full overflow-hidden border-2 border-blue-500 flex-shrink-0"
+						class="w-9 h-9 rounded-full overflow-hidden border-2 border-blue-500 hover:scale-105 transition"
 					>
 						{% if profile_image %}
 						<img
@@ -117,13 +126,13 @@
 			<!-- Mobile Menu Items -->
 			<div
 				id="mobile-menu"
-				class="md:hidden hidden absolute top-16 left-0 w-full z-40 bg-white border-t shadow"
+				class="md:hidden hidden absolute top-16 left-0 w-full z-40 bg-white shadow-md border-t"
 			>
 				<ul class="flex flex-col items-start space-y-4 pt-4 px-4 pb-4">
 					<li>
 						<a
 							href="{% url 'home' %}"
-							class="block text-gray-700 hover:text-blue-600 text-base"
+							class="block text-gray-700 hover:text-red-600 text-base"
 							>Home</a
 						>
 					</li>
@@ -131,7 +140,7 @@
 					<li>
 						<a
 							href="{% url 'dashboard' %}"
-							class="block text-gray-700 hover:text-blue-600 text-base"
+							class="block text-gray-700 hover:text-red-600 text-base"
 							>Dashboard</a
 						>
 					</li>
@@ -139,7 +148,7 @@
 					<li>
 						<a
 							href="{% url 'admin_event' %}"
-							class="block text-gray-700 hover:text-blue-600 text-base"
+							class="block text-gray-700 hover:text-red-600 text-base"
 							>Dashboard</a
 						>
 					</li>
@@ -147,7 +156,7 @@
 					<li>
 						<a
 							href="{% url 'user_dash' %}"
-							class="block text-gray-700 hover:text-blue-600 text-base"
+							class="block text-gray-700 hover:text-red-600 text-base"
 							>Dashboard</a
 						>
 					</li>
@@ -155,14 +164,14 @@
 					<li>
 						<a
 							href="{% url 'home' %}"
-							class="block text-gray-700 hover:text-blue-600 text-base"
+							class="block text-gray-700 hover:text-red-600 text-base"
 							>Events</a
 						>
 					</li>
 					<li>
 						<a
 							href="{% url 'home' %}"
-							class="block text-gray-700 hover:text-blue-600 text-base"
+							class="block text-gray-700 hover:text-red-600 text-base"
 							>About</a
 						>
 					</li>
@@ -172,7 +181,7 @@
 							class="flex items-center space-x-3"
 						>
 							<img
-								src="{% if profile_image %}{{ profile_image.url }}{% else %}https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png{% endif %}"
+								src="{% if profile_image %}{{ profile_image }}{% else %}https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png{% endif %}"
 								alt="Profile"
 								class="w-8 h-8 min-w-8 min-h-8 flex-shrink-0 rounded-full object-cover border-2 border-blue-500"
 							/>
@@ -189,6 +198,9 @@
 
 			menuToggle.addEventListener('click', () => {
 				mobileMenu.classList.toggle('hidden')
+			})
+			window.addEventListener('load', () => {
+				document.getElementById('loader').style.display = 'none'
 			})
 		</script>
 		<script

@@ -1,5 +1,5 @@
 from django import forms
-from tasks.models import Category, Event
+from tasks.models import Category, Event, Speaker
 # from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
@@ -128,6 +128,11 @@ class ParticipantModelForm(StyleFormMixin, forms.ModelForm):
         self.applyStyle()   
 
         # self.fields['username'].help_text = None
+
+class SpeakerForm(forms.ModelForm):
+    class Meta: 
+        model = Speaker
+        fields = ['name', 'title', 'image']
 
 
 

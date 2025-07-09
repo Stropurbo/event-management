@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Delete Speaker</title>
+</head>
+<body>    
+
+    <form method="POST" action="{% url "delete_speaker" %}">
+        {% csrf_token %}
+
+        {% for allspeak in speaker %}
+            
+        <div class="flex items-center space-x-3 p-2">
+            <input type="checkbox" class="size-6" name="speaker" value="{{speaker.id}}">
+            <label class="text-xl font-semibold">{{allspeak.name}}</label>
+        </div> 
+
+        {% endfor %}
+        
+        <button type="submit" class="bg-green-500 rounded-lg mt-5 p-2 text-black">Delete</button>
+
+    </form>   
+    
+</body>
+</html>

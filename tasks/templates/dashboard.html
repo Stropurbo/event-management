@@ -1,243 +1,358 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Dashboard{% endblock title %}</title>
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>{% block title %}Dashboard{% endblock title %}</title>
 
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
-    <script src="{% static 'js/script.js' %}"></script>
+		<link
+			rel="stylesheet"
+			href="{% static 'css/output.css' %}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{% static 'css/style.css' %}"
+		/>
+	</head>
+	<body class="bg-zinc-100">
+		<header class="p-4 bg-white shadow-md mb-5">
+			<div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+				<!-- Left links -->
+				<div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+					<a
+						href="{% url 'dashboard' %}"
+						class="font-bold text-xl p-2"
+						>Dashboard</a
+					>
+					<a
+						href="{% url 'home' %}"
+						class="text-sm p-2"
+						>Home</a
+					>
+				</div>
 
-</head>
-<body class = "bg-zinc-100">
+				<!-- Right links -->
+				<div class="flex flex-wrap items-center gap-2 justify-end">
+					<a
+						href="{% url 'admin-dashboard' %}"
+						class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200"
+						>Manager Dashboard</a
+					>
 
-    <header class="p-4 bg-white shadow-md mb-5">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-          
-          <!-- Left links -->
-          <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
-            <a href="{% url 'dashboard' %}" class="font-bold text-xl p-2">Dashboard</a>
-            <a href="{% url 'home' %}" class="text-sm p-2">Home</a>
-          </div>
-      
-          <!-- Right links -->
-          <div class="flex flex-wrap items-center gap-2 justify-end">
-            
-            <a href="{% url 'admin-dashboard' %}" class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200">Manager Dashboard</a>
-      
-            <a href="{% url 'create_event' %}" class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200">Create Event</a>
-      
-            <a href="{% url 'partici_form' %}" class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200">Add Participate</a>
-      
-            <!-- Dropdown -->
-            <div class="relative">
-              <button id="categoryDropdown" class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200">Category</button>
-              <div id="categoryList" class="absolute right-0 mt-1 bg-white border shadow-lg rounded hidden">
-                <a href="{% url 'category_form' %}" class="block px-4 py-2 hover:bg-gray-100">Create</a>
-                <a href="{% url 'show_cat' %}" class="block px-4 py-2 hover:bg-gray-100">Delete</a>
-              </div>
-            </div>
-      
-            <!-- Notification icon -->
-            <div class="rounded-full p-2 hover:bg-gray-200 cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082...Z" />
-              </svg>
-            </div>
-      
-            <!-- User Initial -->
-            <a href="{% url 'profile' %}" class="rounded-full p-2 bg-blue-500 text-white w-8 h-8 flex items-center justify-center hover:bg-gray-700 text-sm">
-              {% if user.groups.all.0.name == "Admin" %}
-                A
-              {% elif user.groups.all.0.name == "Manager" %}
-                M
-              {% else %}
-                U
-              {% endif %}
-            </a>
-          </div>
-        </div>
-      </header>
-      
-    
-    <main>
+					<a
+						href="{% url 'create_event' %}"
+						class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200"
+						>Create Event</a
+					>
 
-        {% if messages %}
-            <div class="alert-container flex justify-center p-5">
-                <ul class="alert-list">
-                    {% for message in messages %}
-                        <li class="alert alert-success text-green-500 font-bold">{{ message }}</li> 
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+					<a
+						href="{% url 'partici_form' %}"
+						class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200"
+						>Add Participate</a
+					>
 
-        <div class = "mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-5">
+					<!-- Dropdown -->
+					<div class="relative">
+						<button
+							id="categoryDropdown"
+							class="createevent p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200"
+						>
+							Category
+						</button>
+						<div
+							id="categoryList"
+							class="absolute right-0 mt-1 bg-white border shadow-lg rounded hidden"
+						>
+							<a
+								href="{% url 'category_form' %}"
+								class="block px-4 py-2 hover:bg-gray-100"
+								>Create</a
+							>
+							<a
+								href="{% url 'show_cat' %}"
+								class="block px-4 py-2 hover:bg-gray-100"
+								>Delete</a
+							>
+						</div>
+					</div>
 
-            <div class="totalevent flex items-center justify-between shadow-md bg-red-100 p-5 rounded-xl hover:bg-red-200 hover:text-red-800 transition duration-300">
-                <div>
-                    <h5 class="mb-2 font-bold text-gray-500">Total Event</h5>
-                    <p class="font-bold text-2xl"> {{event_count.total}} </p>
-                </div>            
-            </div>
-            
-            <div class="upcomingevent flex items-center justify-between bg-blue-100 p-5 rounded-xl shadow-md hover:bg-blue-200 hover:text-blue-800 transition duration-300">
-                <div>
-                    <h5 class="mb-2 font-bold text-gray-500">Upcoming Events</h5>
-                    <p class="font-bold text-2xl"> {{event_count.upcoming}} </p>
-                </div>
-                
-            </div>
+					<!-- speaker -->
+					<div class="relative inline-block">
+						<button
+							id="speakerButton"
+							class="p-2 text-black rounded-lg text-sm bg-gray-100 hover:bg-gray-200"
+						>
+							Speaker
+						</button>
 
-            <div class="completdevent flex items-center justify-between bg-green-100 p-5 rounded-xl shadow-md hover:bg-green-200 hover:text-green-800 transition duration-300">
-                <div>
-                    <h5 class="mb-2 font-bold text-gray-500">Completed Events</h5>
-                    <p class="font-bold text-2xl"> {{event_count.completed}} </p>
-                </div>
-                
-            </div>
+						<div
+							id="speakcreatordel"
+							class="absolute right-0 mt-1 bg-white border shadow-lg rounded hidden z-50"
+						>
+							<a
+								href="{% url 'create-speaker' %}"
+								class="block px-4 py-2 hover:bg-gray-100"
+								>Create</a
+							>
+							<a
+								href="{% url 'delete_speaker' %}"
+								class="block px-4 py-2 hover:bg-gray-100"
+								>Delete</a
+							>
+						</div>
+					</div>
 
-            <div class="todayevent flex items-center justify-between bg-yellow-100 p-5 rounded-xl shadow-md hover:bg-yellow-200 hover:text-yellow-800 transition duration-300">
-                <div>
-                    <h5 class="mb-2 font-bold text-gray-500">Today Events</h5>
-                    <p class="font-bold text-2xl"> {{event_count.today_event}} </p>
-                </div>
-                <div>
-                    
-                </div>
-            </div>
+					<!-- Notification icon
+                        <div class="rounded-full p-2 hover:bg-gray-200 cursor-pointer">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-6 h-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M14.857 17.082...Z"
+                                />
+                            </svg>
+                        </div> -->
 
-            <div class="pastevent flex items-center justify-between bg-indigo-100 p-5 rounded-xl shadow-md hover:bg-indigo-200 hover:text-indigo-800 transition duration-300">
-                <div>
-                    <h5 class="mb-2 font-bold text-gray-500">Past Events</h5>
-                    <p class="font-bold text-2xl"> {{event_count.past_event}} </p>
-                </div>
-                
-            </div>
+					<!-- User Initial -->
+					<a
+						href="{% url 'profile' %}"
+						class="rounded-full p-2 bg-blue-500 text-white w-8 h-8 flex items-center justify-center hover:bg-gray-700 text-sm"
+					>
+						{% if user.groups.all.0.name == "Admin" %} A {% elif
+						user.groups.all.0.name == "Manager" %} M {% else %} U {% endif %}
+					</a>
+				</div>
+			</div>
+		</header>
 
+		<main>
+			{% if messages %}
+			<div class="alert-container flex justify-center p-5">
+				<ul class="alert-list">
+					{% for message in messages %}
+					<li class="alert alert-success text-green-500 font-bold">{{ message }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
 
-            <div class="pastevent flex items-center justify-between bg-pink-100 p-5 rounded-xl shadow-md
-            hover:bg-pink-200 hover:text-pink-800 transition duration-300">
-                <div>
-                    <h5 class="mb-2 font-bold text-gray-500">Total Participants</h5>
-                    <p class="font-bold text-2xl"> {{total_participate}} </p>
-                </div>
-                
-            </div>
-        </div>
+			<div
+				class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-5"
+			>
+				<div
+					class="totalevent flex items-center justify-between shadow-md bg-red-100 p-5 rounded-xl hover:bg-red-200 hover:text-red-800 transition duration-300"
+				>
+					<div>
+						<h5 class="mb-2 font-bold text-gray-500">Total Event</h5>
+						<p class="font-bold text-2xl">{{event_count.total}}</p>
+					</div>
+				</div>
 
-        <div>
-            <div class="mt-8 w-full flex flex-wrap justify-center gap-3">
-                <a href="?type=all" class="createevent p-2 bg-gray-600 text-white rounded-lg ">All Events</a>
-                <a href="?type=today" class="createevent p-2 bg-green-500 text-white rounded-lg">Today Events</a>
-                <a href="?type=upcoming" class="createevent p-2 bg-yellow-600 text-white rounded-lg">Upcoming Events</a>
-                <a href="?type=past" class="createevent p-2 bg-blue-600 text-white rounded-lg">Past Events</a>
-            </div>
-        </div>
+				<div
+					class="upcomingevent flex items-center justify-between bg-blue-100 p-5 rounded-xl shadow-md hover:bg-blue-200 hover:text-blue-800 transition duration-300"
+				>
+					<div>
+						<h5 class="mb-2 font-bold text-gray-500">Upcoming Events</h5>
+						<p class="font-bold text-2xl">{{event_count.upcoming}}</p>
+					</div>
+				</div>
 
+				<div
+					class="completdevent flex items-center justify-between bg-green-100 p-5 rounded-xl shadow-md hover:bg-green-200 hover:text-green-800 transition duration-300"
+				>
+					<div>
+						<h5 class="mb-2 font-bold text-gray-500">Completed Events</h5>
+						<p class="font-bold text-2xl">{{event_count.completed}}</p>
+					</div>
+				</div>
 
-        <div class="bg-white w-full p-5 mt-5 rounded-xl">        
-               
-                <ol class="list-decimal space-y-4">
-                    {% for event in events %}
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-3">
+				<div
+					class="todayevent flex items-center justify-between bg-yellow-100 p-5 rounded-xl shadow-md hover:bg-yellow-200 hover:text-yellow-800 transition duration-300"
+				>
+					<div>
+						<h5 class="mb-2 font-bold text-gray-500">Today Events</h5>
+						<p class="font-bold text-2xl">{{event_count.today_event}}</p>
+					</div>
+					<div></div>
+				</div>
 
-                        <div class="mx-5">
-                            <li class="font-medium">{{event.name}} - {{event.date}} - {{event.location}}</li>
-                        </div>
+				<div
+					class="pastevent flex items-center justify-between bg-indigo-100 p-5 rounded-xl shadow-md hover:bg-indigo-200 hover:text-indigo-800 transition duration-300"
+				>
+					<div>
+						<h5 class="mb-2 font-bold text-gray-500">Past Events</h5>
+						<p class="font-bold text-2xl">{{event_count.past_event}}</p>
+					</div>
+				</div>
 
-                    <!-- createevent in class id -->
-                        <div class="m-2 flex gap-2 flex-wrap">                            
-                            <a href="{% url 'update_event' event.id %}" 
-                            class="inline-flex items-center justify-center bg-green-500 hover:bg-white text-black border text-sm font-medium px-4 py-2 rounded-lg shadow transition duration-200">
-                            ✏️ Edit</a>
+				<div
+					class="pastevent flex items-center justify-between bg-pink-100 p-5 rounded-xl shadow-md hover:bg-pink-200 hover:text-pink-800 transition duration-300"
+				>
+					<div>
+						<h5 class="mb-2 font-bold text-gray-500">Total Participants</h5>
+						<p class="font-bold text-2xl">{{total_participate}}</p>
+					</div>
+				</div>
+			</div>
 
-                            <form action="{% url 'delete_event' event.id %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" 
-                                class="inline-flex items-center justify-center bg-red-500 hover:bg-white text-black text-sm border font-medium px-4 py-2 rounded-lg shadow transition duration-200">
-                                    🗑️ Delete
-                                </button>
-                            </form>                      
-                        </div>                                     
-                    </div>
-                    {% endfor %}
-                </ol>
-                <div>
+			<div>
+				<div class="mt-8 w-full flex flex-wrap justify-center gap-3">
+					<a
+						href="?type=all"
+						class="createevent p-2 bg-gray-600 text-white rounded-lg"
+						>All Events</a
+					>
+					<a
+						href="?type=today"
+						class="createevent p-2 bg-green-500 text-white rounded-lg"
+						>Today Events</a
+					>
+					<a
+						href="?type=upcoming"
+						class="createevent p-2 bg-yellow-600 text-white rounded-lg"
+						>Upcoming Events</a
+					>
+					<a
+						href="?type=past"
+						class="createevent p-2 bg-blue-600 text-white rounded-lg"
+						>Past Events</a
+					>
+				</div>
+			</div>
 
-                </div>
-                
-        </div>
-    
+			<div class="bg-white w-full p-5 mt-5 rounded-xl">
+				<ol class="list-decimal space-y-4">
+					{% for event in events %}
+					<div
+						class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-3"
+					>
+						<div class="mx-5">
+							<li class="font-medium">
+								{{event.name}} - {{event.date}} - {{event.location}}
+							</li>
+						</div>
 
-        
-        <div class="mt-8 bg-white p-5 shadow-lg rounded-xl">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Participants List</h3>
-        
-            <div class="overflow-x-auto">
-                <table class="min-w-[900px] w-full border-collapse border border-gray-400 text-xs sm:text-sm">
-                    <thead>
-                        <tr class="bg-gray-300">
-                            <th class="border p-2 sm:p-3">Name</th>
-                            <th class="border p-2 sm:p-3">Username</th>
-                            <th class="border p-2 sm:p-3">E-mail</th>
-                            <th class="border p-2 sm:p-3 text-center">Events</th>
-                            <th class="border p-2 sm:p-3">Participated</th>
-                        </tr>
-                    </thead>
-        
-                    <tbody>
-                        {% for participant in participants %}
-                        <tr class="border">
-                            <!-- Name & Delete -->
-                            <td class="border p-2 sm:p-3">
-                                <div class="flex justify-between items-center gap-2 flex-wrap">
-                                    <span class="truncate text-center w-full sm:w-auto">{{ participant.get_full_name }}</span>
-                                    <div class="flex flex-col sm:flex-row gap-1">
-                                        {% for event in participant.rsvp_event.all %}
-                                        <form action="{% url 'delete_participant' event.id participant.id %}" method="POST">
-                                            {% csrf_token %}
-                                            <button class="text-gray-500 hover:text-red-600 text-xs sm:text-sm">Delete</button>
-                                        </form>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-        
-                            <!-- Username -->
-                            <td class="border p-2 sm:p-3 truncate">{{ participant.username }}</td>
-        
-                            <!-- Email -->
-                            <td class="border p-2 sm:p-3 truncate">{{ participant.email }}</td>
-        
-                            <!-- RSVP Count -->
-                            <td class="border p-2 sm:p-3 text-center">{{ participant.rsvp_event.count }}</td>
-        
-                            <!-- Participated Events -->
-                            <td class="border p-2 sm:p-3">
-                                <div class="flex flex-wrap gap-1 max-w-full">
-                                    {% for event in participant.rsvp_event.all %}
-                                    <span class="bg-blue-500 text-white px-2 py-1 rounded-md text-xs truncate max-w-[150px] sm:max-w-full">
-                                        {{ event.name }}
-                                    </span>
-                                    {% empty %}
-                                    <span class="text-gray-500">No Events</span>
-                                    {% endfor %}
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-                       
-        
+						<!-- createevent in class id -->
+						<div class="m-2 flex gap-2 flex-wrap">
+							<a
+								href="{% url 'update_event' event.id %}"
+								class="inline-flex items-center justify-center bg-green-500 hover:bg-white text-black border text-sm font-medium px-4 py-2 rounded-lg shadow transition duration-200"
+							>
+								✏️ Edit</a
+							>
 
-    </main>
-    
-    
-</body>
+							<form
+								action="{% url 'delete_event' event.id %}"
+								method="POST"
+							>
+								{% csrf_token %}
+								<button
+									type="submit"
+									class="inline-flex items-center justify-center bg-red-500 hover:bg-white text-black text-sm border font-medium px-4 py-2 rounded-lg shadow transition duration-200"
+								>
+									🗑️ Delete
+								</button>
+							</form>
+						</div>
+					</div>
+					{% endfor %}
+				</ol>
+				<div></div>
+			</div>
+
+			<div class="mt-8 bg-white p-5 shadow-lg rounded-xl">
+				<h3 class="text-xl font-semibold text-gray-700 mb-4">Participants List</h3>
+
+				<div class="overflow-x-auto">
+					<table
+						class="min-w-[900px] w-full border-collapse border border-gray-400 text-xs sm:text-sm"
+					>
+						<thead>
+							<tr class="bg-gray-300">
+								<th class="border p-2 sm:p-3">Name</th>
+								<th class="border p-2 sm:p-3">Username</th>
+								<th class="border p-2 sm:p-3">E-mail</th>
+								<th class="border p-2 sm:p-3 text-center">Events</th>
+								<th class="border p-2 sm:p-3">Participated</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							{% for participant in participants %}
+							<tr class="border">
+								<!-- Name & Delete -->
+								<td class="border p-2 sm:p-3">
+									<div
+										class="flex justify-between items-center gap-2 flex-wrap"
+									>
+										<span class="truncate text-center w-full sm:w-auto"
+											>{{ participant.get_full_name }}</span
+										>
+										<div class="flex flex-col sm:flex-row gap-1">
+											{% for event in participant.rsvp_event.all %}
+											<form
+												action="{% url 'delete_participant' event.id participant.id %}"
+												method="POST"
+											>
+												{% csrf_token %}
+												<button
+													class="text-gray-500 hover:text-red-600 text-xs sm:text-sm"
+												>
+													Delete
+												</button>
+											</form>
+											{% endfor %}
+										</div>
+									</div>
+								</td>
+
+								<!-- Username -->
+								<td class="border p-2 sm:p-3 truncate">
+									{{ participant.username }}
+								</td>
+
+								<!-- Email -->
+								<td class="border p-2 sm:p-3 truncate">
+									{{ participant.email }}
+								</td>
+
+								<!-- RSVP Count -->
+								<td class="border p-2 sm:p-3 text-center">
+									{{ participant.rsvp_event.count }}
+								</td>
+
+								<!-- Participated Events -->
+								<td class="border p-2 sm:p-3">
+									<div class="flex flex-wrap gap-1 max-w-full">
+										{% for event in participant.rsvp_event.all %}
+										<span
+											class="bg-blue-500 text-white px-2 py-1 rounded-md text-xs truncate max-w-[150px] sm:max-w-full"
+										>
+											{{ event.name }}
+										</span>
+										{% empty %}
+										<span class="text-gray-500">No Events</span>
+										{% endfor %}
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+		<script src="{% static 'js/script.js' %}"></script>
+	</body>
 </html>
