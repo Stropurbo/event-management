@@ -44,7 +44,7 @@ class Home(ListView):
         search_q = self.request.GET.get('search', '').strip()
         category = self.request.GET.get('category', '')
 
-        all_event = Event.objects.all()
+        all_event = Event.objects.all()        
 
         if search_q:
             all_event = all_event.filter(
@@ -59,6 +59,7 @@ class Home(ListView):
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
         context['cat'] = Category.objects.all()
+        context['speakers'] = Speaker.objects.all()
         return context
 
 @method_decorator(create_decorators, name="dispatch")
@@ -120,45 +121,53 @@ class UpdateEvent(View):
         else:
             return redirect('home')
 
-# class CreateSpeaker(View):
-#     template_name  = "speaker.html"
-
-#     def get(self, request, *args, **kwargs):
-#         speaker_forom = SpeakerForm()
-
-#         context = {
-#         "create_speaker": speaker_forom  
-#         }        
-#         return render(request, self.template_name, context)
-    
-#     def post(self, request, *args, **kwargs):
-#         speaker_form = SpeakerForm(request.POST, request.FILES)
-        
-#         if speaker_form.is_valid():
-#             speaker_form.save()            
-#             return redirect('dashboard')
-
-class CreateSpeaker(CreateView):
-    model = Speaker
-    form_class = SpeakerForm
-    template_name = "speaker.html"
-    success_url = "dashboard"
-
-class DeleteSpeaker(View):
-    template_name = "delete_speaker.html"
+class CreateSpeaker(View):
+    template_name  = "speaker.html"
 
     def get(self, request, *args, **kwargs):
-        speakers = Speaker.objects.all()
-        return render(request, self.template_name, {'speaker': speakers})
+        speaker_forom = SpeakerForm()
+        all_speakers = Speaker.objects.all()
 
+        context = {
+        "create_speaker": speaker_forom,
+        "speakers": all_speakers
+        }        
+        return render(request, self.template_name, context)
+    
     def post(self, request, *args, **kwargs):
-        select_speaker = request.POST.getlist('speaker')
+        speaker_form = SpeakerForm(request.POST, request.FILES)
         
-        for speaker_id in select_speaker:
-            speaker = get_object_or_404(Speaker, id=speaker_id)
-            speaker.delete()
+        if speaker_form.is_valid():
+            speaker_form.save()
+            return redirect('dashboard')
 
-        return redirect('dashboard')
+# class CreateSpeaker(CreateView):
+#     model = Speaker
+#     form_class = SpeakerForm
+#     template_name = "speaker.html"
+#     success_url = "dashboard"
+
+# class DeleteSpeaker(View):
+#     def post(self, request, pk, *args, **kwargs):
+#         speaker = get_object_or_404(Speaker, id=pk)
+#         speaker.delete()
+#         return redirect('dashboard') 
+
+# class DeleteSpeaker(View):
+#     template_name = "delete_speaker.html"
+
+#     def get(self, request, *args, **kwargs):
+#         speakers = Speaker.objects.all()
+#         return render(request, self.template_name, {'speaker': speakers})
+
+#     def post(self, request, *args, **kwargs):
+#         select_speaker = request.POST.getlist('speaker')
+        
+#         for speaker_id in select_speaker:
+#             speaker = get_object_or_404(Speaker, id=speaker_id)
+#             speaker.delete()
+
+#         return redirect('dashboard')
 
 class ShowCategory(TemplateView):
     template_name = "delete_cat.html"
@@ -300,6 +309,7 @@ class DashboardView(TemplateView):
         context =  super().get_context_data(**kwargs)
         type = self.request.GET.get('type', 'all')
         today = timezone.now().date()
+        speakers = Speaker.objects.all()
 
         event_count = Event.objects.aggregate(
         total = Count('id'),
@@ -330,6 +340,7 @@ class DashboardView(TemplateView):
         'total_participate' : total_participate,
         'participants' : participants,
         'events' : events,
+        'speakers': speakers
         }
 
         return context

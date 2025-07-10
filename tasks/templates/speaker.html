@@ -1,21 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Speaker</title>
-</head>
-<body>
-    <h1>Create a New Speaker</h1>
-    
-    <form action="{% url 'create-speaker' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        {{ speaker_form.as_p }}
-        
-        <button type="submit">Create</button>
-    </form>
+{% extends "base.html" %}
+<title>Create Speaker</title>
 
-    
-</body>
-</html>
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+	<div class="w-full max-w-md bg-white shadow-md rounded-xl p-8 space-y-6">
+		<h2 class="text-2xl font-bold text-center text-gray-800">🧑 Create New Speaker</h2>
+		<form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+        
+            <!-- Name field -->
+            <div>
+                {{ create_speaker.name }}
+                {% for error in create_speaker.name.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+        
+            <!-- Title field -->
+            <div>
+                {{ create_speaker.title }}
+                {% for error in create_speaker.title.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+        
+            <!-- Image field -->
+            <div>
+                {{ create_speaker.image }}
+                {% for error in create_speaker.image.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+        
+            <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
+                ➕ Submit
+            </button>
+        </form>
+        
+	</div>
+</div>
+{% endblock %}

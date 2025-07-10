@@ -129,10 +129,11 @@ class ParticipantModelForm(StyleFormMixin, forms.ModelForm):
 
         # self.fields['username'].help_text = None
 
-class SpeakerForm(forms.ModelForm):
+class SpeakerForm(StyleFormMixin, forms.ModelForm):
     class Meta: 
         model = Speaker
         fields = ['name', 'title', 'image']
+        
 
 
 

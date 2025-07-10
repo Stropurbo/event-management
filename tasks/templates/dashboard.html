@@ -90,7 +90,7 @@
 						</button>
 
 						<div
-							id="speakcreatordel"
+							id="spctordel"
 							class="absolute right-0 mt-1 bg-white border shadow-lg rounded hidden z-50"
 						>
 							<a
@@ -99,7 +99,7 @@
 								>Create</a
 							>
 							<a
-								href="{% url 'delete_speaker' %}"
+								
 								class="block px-4 py-2 hover:bg-gray-100"
 								>Delete</a
 							>
@@ -127,10 +127,21 @@
 					<!-- User Initial -->
 					<a
 						href="{% url 'profile' %}"
-						class="rounded-full p-2 bg-blue-500 text-white w-8 h-8 flex items-center justify-center hover:bg-gray-700 text-sm"
+						class="rounded-full w-8 h-8 overflow-hidden bg-blue-500 hover:bg-gray-700 flex items-center justify-center"
 					>
-						{% if user.groups.all.0.name == "Admin" %} A {% elif
-						user.groups.all.0.name == "Manager" %} M {% else %} U {% endif %}
+						{% if profile_image %}
+						<img
+							src="{{ profile_image }}"
+							alt="Profile Image"
+							class="w-full h-full object-center"
+						/>
+						{% else %}
+						<img
+							src="https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png"
+							alt="Default Profile"
+							class="w-full h-full object-cover"
+						/>
+						{% endif %}
 					</a>
 				</div>
 			</div>
@@ -352,6 +363,25 @@
 					</table>
 				</div>
 			</div>
+
+			<div class="bg-white w-full p-5 mt-5 rounded-xl">				
+				<h3 class="text-xl font-semibold text-gray-700 mb-4">Speaker</h3>
+				<ol class="list-decimal space-y-4">
+					{% for sp in speakers %}
+					<div
+						class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-3"
+					>
+						<div class="mx-5">
+							<li class="font-medium">
+								{{sp.name}}
+							</li>
+						</div>
+						
+					</div>
+					{% endfor %}
+				</ol>				
+			</div>
+
 		</main>
 		<script src="{% static 'js/script.js' %}"></script>
 	</body>

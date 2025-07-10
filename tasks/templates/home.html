@@ -234,7 +234,7 @@
 
 	<!-- Hotels Section -->
 	<div class="px-5 max-w-screen-full mx-auto">
-		<div class="flex justify-between items-center mb-4 text-sm md:text-2xl">
+		<div class="flex justify-between items-center text-sm md:text-2xl">
 			<div class="flex justify-center text-red-500 text-xl font-bold p-3">SPEAKER</div>
 
 			<div class="flex flex-nowrap space-x-3 md:space-x-5 items-center">
@@ -256,31 +256,39 @@
 		</div>
 	</div>
 
-	<section class="pevent p-5">
+	<section class="pevent px-5 py-5">
 		<div class="pevent-container flex flex-nowrap gap-5 overflow-x-auto scroll-smooth">
 			<!-- Card 1 -->
+			{% for sp in speakers %}
 			<div
 				class="pevent-card min-w-[256px] md:w-72 bg-white shadow-lg rounded-lg p-3 group"
 			>
 				<div
 					class="pevent-image relative flex items-center justify-center overflow-hidden rounded group"
 				>
+					{% if sp.image %}
 					<img
-						src="https://i.ibb.co/v40TZnGs/unnamed.webp"
-						alt=""
+						src="{{ sp.image.url }}"
+						alt="{{ sp.name }}"
 						class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110"
 					/>
+					{% else %}					
+					<img
+						src="https://i.ibb.co/hx5Jxb8h/img-icons8.png"
+						alt="Default Speaker"
+						class="h-60 object-cover rounded transition-transform duration-500 group-hover:scale-110"
+					/>
+					{% endif %}
 				</div>
 
-				<h2 class="font-bold text-lg text-center line-clamp-1">Speaker Name</h2>
-
-				<p class="text-sm text-gray-600 text-center line-clamp-2">Speaker Title</p>
+				<h2 class="font-bold text-lg text-center line-clamp-1">{{ sp.name }}</h2>
+				<p class="text-sm text-gray-600 text-center line-clamp-2">{{ sp.title }}</p>
 			</div>
+			{% empty %}
+			<p class="text-center w-full text-gray-500">No speakers found.</p>
+			{% endfor %}
 		</div>
-
 	</section>
-
-  
 
 	<script>
 		const prevBtn = document.querySelector('.pre-btn')
