@@ -11,12 +11,18 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-class Event(models.Model):
-    
+class Speaker(models.Model):
+    name = models.CharField(max_length=200)
+    title = models.CharField(max_length=250)
+    image = models.ImageField(upload_to='speaker_image', blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+class Event(models.Model):    
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     date = models.DateField(db_index=True)
-    time = models.TimeField(auto_now=True)
+    time = models.TimeField()
     location = models.CharField(max_length=250)
     email = models.EmailField(unique=True, blank=True, null=True)
     status = models.CharField(max_length=30, choices= [
@@ -38,15 +44,13 @@ class Event(models.Model):
         default=1,
         db_index=True
         )
+    speaker = models.ManyToManyField(
+        Speaker,
+        blank=True, null=True
+    )
 
     def __str__(self):
         return self.name
     
-class Speaker(models.Model):
-    name = models.CharField(max_length=200)
-    title = models.CharField(max_length=250)
-    image = models.ImageField(upload_to='speaker_image', blank=True, null=True)
 
-    def __str__(self):
-        return self.name
     

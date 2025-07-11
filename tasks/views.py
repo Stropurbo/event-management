@@ -76,21 +76,27 @@ class CreateEvent(View):
         return render(request, self.event_html, context)
 
     def post(self, request, *args, **kwargs):
-        event_form = EventModelForm(request.POST, request.FILES)        
-        if event_form.is_valid():
+        event_form = EventModelForm(request.POST, request.FILES)
 
+        if event_form.is_valid():
+            print("✅ Form is valid")
             event = event_form.save()
             participants = event_form.cleaned_data['participants']
-            event.participants.set(participants) # for save participant
-
+            event.participants.set(participants)
+            event.speaker.set(event_form.cleaned_data['speaker']) 
             event.save()
 
-        if request.user.groups.filter(name="Admin").exists():
-            return redirect('dashboard')  
-        elif request.user.groups.filter(name="Manager").exists():
-            return redirect('admin_event') 
+            if request.user.groups.filter(name="Admin").exists():
+                return redirect('dashboard')  
+            elif request.user.groups.filter(name="Manager").exists():
+                return redirect('admin_event') 
+            else:
+                return redirect('delete_cat')
         else:
-            return redirect('delete_cat') 
+            print("Form is invalid")
+            print(event_form.errors.as_json()) 
+        
+        return render(request, self.event_html, {"create_event": event_form})
 
 
         
@@ -147,27 +153,11 @@ class CreateSpeaker(View):
 #     template_name = "speaker.html"
 #     success_url = "dashboard"
 
-# class DeleteSpeaker(View):
-#     def post(self, request, pk, *args, **kwargs):
-#         speaker = get_object_or_404(Speaker, id=pk)
-#         speaker.delete()
-#         return redirect('dashboard') 
-
-# class DeleteSpeaker(View):
-#     template_name = "delete_speaker.html"
-
-#     def get(self, request, *args, **kwargs):
-#         speakers = Speaker.objects.all()
-#         return render(request, self.template_name, {'speaker': speakers})
-
-#     def post(self, request, *args, **kwargs):
-#         select_speaker = request.POST.getlist('speaker')
-        
-#         for speaker_id in select_speaker:
-#             speaker = get_object_or_404(Speaker, id=speaker_id)
-#             speaker.delete()
-
-#         return redirect('dashboard')
+class DeleteSpeaker(View):
+    def post(self, request, pk):
+        speak = get_object_or_404(Speaker, id=pk)
+        speak.delete()        
+        return redirect('dashboard')
 
 class ShowCategory(TemplateView):
     template_name = "delete_cat.html"

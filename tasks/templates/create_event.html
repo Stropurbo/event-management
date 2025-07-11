@@ -1,60 +1,57 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
+<h1 class="flex justify-center font-bold text-2xl m-5 text-green-900 font-serif">
+	Create New Event
+</h1>
 
-    <h1 class="flex justify-center font-bold text-2xl m-5 text-green-900 font-serif">Create New Event</h1>
+<div class="flex justify-center items-center">
+	<form
+		action=""
+		method="POST"
+		enctype="multipart/form-data"
+	>
+		{% csrf_token %}
 
-    <div class="flex justify-center items-center">
+		<div class="mt-2 mb-2">
+			<label for="">Event Name:</label>
+			{{create_event.name}}
+		</div>
 
-        <form action="" method="POST" enctype='multipart/form-data'>
-            {% csrf_token %}
+		<div class="mt-2 mb-2">
+			{{create_event.description.label_tag}} {{create_event.description}}
+		</div>
 
-            <div class="mt-2 mb-2">
-                <label for="">Event Name:</label>
-                {{create_event.name}}
-            </div>
+		<div class="mt-2 mb-2">{{create_event.date.label_tag}} {{create_event.date}}</div>
 
-            <div class="mt-2 mb-2">
-                {{create_event.description.label_tag}}
-                {{create_event.description}}
-            </div>
+		<div class="mt-2 mb-2">
+			{{create_event.location.label_tag}} {{create_event.location}}
+		</div>
 
-            <div class="mt-2 mb-2">
-                {{create_event.date.label_tag}}
-                {{create_event.date}}
-            </div>
+		<div class="mt-2 mb-2">
+			{{create_event.category.label_tag}} {{create_event.category}}
+		</div>
 
-            <div class="mt-2 mb-2">
-                {{create_event.location.label_tag}}
-                {{create_event.location}}              
-            </div>
+		<div class="mt-2 mb-2">{{create_event.status.label_tag}} {{create_event.status}}</div>
 
-            <div class="mt-2 mb-2">
-                {{create_event.category.label_tag}}
-                {{create_event.category}}                 
-            </div>            
+		<div class="mt-2 mb-2">{{create_event.asset.label_tag}} {{create_event.asset}}</div>
 
-            <div class="mt-2 mb-2">
-                {{create_event.status.label_tag}}
-                {{create_event.status}}                      
-            </div>
+		<div class="mt-2 mb-2">
+			{{create_event.participants.label_tag}} {{create_event.participants}}
+		</div>
 
-            <div class="mt-2 mb-2">
-                {{create_event.asset.label_tag}}
-                {{create_event.asset}}                      
-            </div>
+		<div class="mt-2 mb-2">{{ create_event.time.label_tag }} {{ create_event.time }}</div>
 
-            <div class="mt-2 mb-2">
-                {{create_event.participants.label_tag}}
-                {{create_event.participants}}                      
-            </div>
+		<div class="mt-2 mb-2">
+			{{ create_event.speaker.label_tag }} {{ create_event.speaker }}
+		</div>
 
-            <button type="submit" class="bg-green-500 p-2 mt-5 flex justify-center w-full rounded-lg items-center text-center">
-                Submit
-            </button>
-
-        </form>
-    
-    </div>
+		<button
+			type="submit"
+			class="bg-green-500 p-2 mt-5 flex justify-center w-full rounded-lg items-center text-center"
+		>
+			Submit
+		</button>
+	</form>
+</div>
 
 {% endblock content %}

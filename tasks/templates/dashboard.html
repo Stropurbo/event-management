@@ -97,12 +97,7 @@
 								href="{% url 'create-speaker' %}"
 								class="block px-4 py-2 hover:bg-gray-100"
 								>Create</a
-							>
-							<a
-								
-								class="block px-4 py-2 hover:bg-gray-100"
-								>Delete</a
-							>
+							>							
 						</div>
 					</div>
 
@@ -375,6 +370,21 @@
 							<li class="font-medium">
 								{{sp.name}}
 							</li>
+						</div>
+							<div class="m-2 flex gap-2 flex-wrap">							
+
+							<form
+								action="{% url 'delete_speaker' sp.id %}"
+								method="POST"
+							>
+								{% csrf_token %}
+								<button
+									type="submit"
+									class="inline-flex items-center justify-center bg-red-500 hover:bg-white text-black text-sm border font-medium px-4 py-2 rounded-lg shadow transition duration-200"
+								>
+									🗑️ Delete
+								</button>
+							</form>
 						</div>
 						
 					</div>

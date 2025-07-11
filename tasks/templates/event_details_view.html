@@ -1,38 +1,59 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="max-w-4xl mx-auto mt-10 px-5 py-10">
-  
-  <!-- Event Image -->
-  <div class="overflow-hidden rounded-2xl shadow-md">
+<div class="max-w-screen mx-auto px-5 py-10">
+
+  <!-- Event Banner with overlay text -->
+  <div class="relative rounded-3xl overflow-hidden shadow-lg">
     {% if event.asset %}
-      <img src="{{ event.asset.url }}" alt="Event Image" class="w-full h-72 object-cover">
+      <img src="{{ event.asset.url }}" alt="{{ event.name }}" class="w-full h-[500px] object-cover">
     {% else %}
-      <img src="https://i.ibb.co/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" alt="Default Event Image" class="w-full h-72 object-cover">
+      <img src="https://i.ibb.co/1Y4Qddqj/photo-1516450360452-9312f5e86fc7.jpg" alt="Default Image" class="w-full h-96 object-cover">
     {% endif %}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+      <h1 class="text-4xl font-extrabold text-white drop-shadow-lg">{{ event.name }}</h1>
+    </div>
   </div>
 
-  <!-- Event Details -->
-  <div class="mt-6 bg-white p-6 rounded-xl shadow-lg space-y-4">
-    <h1 class="text-3xl font-bold text-gray-800 font-serif">{{ event.name }}</h1>
-    
-    <p class="text-gray-600">{{ event.description }}</p>
+  <!-- Details Card -->
+  <div class="bg-white rounded-2xl shadow-xl p-8 space-y-8">    
+    <!-- Description -->
+    <div>
+      <h2 class="text-xl font-semibold text-indigo-600 mb-2">About This Event</h2>
+      <p class="text-black whitespace-pre-line leading-relaxed text-base">
+        {{ event.description|linebreaksbr }}
+      </p>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <p><span class="font-semibold text-gray-700">📅 Date:</span> {{ event.date }}</p>
-      <p><span class="font-semibold text-gray-700">🕒 Time:</span> {{ event.time }}</p>
-      <p><span class="font-semibold text-gray-700">📍 Location:</span> {{ event.location }}</p>
-      <p><span class="font-semibold text-gray-700">📂 Category:</span> {{ event.category }}</p>
+    <!-- Info Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-700">
+      <div class="flex items-center gap-2">
+        <span class="text-indigo-600 font-bold">📅 Date:</span>
+        <span>{{ event.date|date:"F j, Y" }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-indigo-600 font-bold">🕒 Time:</span>
+        <span>{{ event.time|time:"h:i A" }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-indigo-600 font-bold">📍 Location:</span>
+        <span>{{ event.location }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-indigo-600 font-bold">📂 Category:</span>
+        <span>{{ event.category }}</span>
+      </div>
     </div>
 
     <!-- RSVP Button -->
-    <div class="mt-6">
+    <div class="text-center pt-6">
       <form action="{% url 'rsvp_event' event.id %}" method="POST">
         {% csrf_token %}
         <button type="submit"
-          class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-5 py-2 rounded-full transition duration-300 shadow-md">
+          class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transition-all duration-300 text-lg">
           RSVP Now
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -40,8 +61,6 @@
       </form>
     </div>
   </div>
-
 </div>
 
 {% endblock content %}
-

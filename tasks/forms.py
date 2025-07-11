@@ -67,16 +67,19 @@ class StyleFormMixin:
 class EventModelForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name','description','date','location','category','status', 'asset', 'participants']
+        fields = ['name','description','date', 'time', 'location','category','status', 'asset', 'participants', 'speaker']
         widgets = {
             'name' : forms.TextInput(attrs={'required' : True}),
             'description' : forms.Textarea(attrs={'required' : True}),        
             'date' : forms.SelectDateWidget(attrs={'required' : True}),
+            'time': forms.TimeInput(attrs={'type': 'time', 'required': True}),
             'location' : forms.TextInput(attrs={'required' : True}),
             'category' : forms.RadioSelect(attrs={'required' : True}),
             'status' : forms.Select(attrs={'required' : True}),
             # 'asset' : forms.ClearableFileInput(attrs={'required' : True}),
-            'participants' : forms.CheckboxSelectMultiple()
+            'participants' : forms.CheckboxSelectMultiple(),
+            'speaker': forms.CheckboxSelectMultiple()
+
         }
         labels = {
             'name': 'Name',
@@ -85,13 +88,15 @@ class EventModelForm(StyleFormMixin, forms.ModelForm):
             'location': 'Location',
             'category' : 'Category',
             'status' : 'Status',
-            'participants' : 'Participants'
+            'participants' : 'Participants',
+            'speaker' : 'Speaker',
         }   
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.order_by('name')
         self.fields['participants'].queryset = User.objects.order_by('first_name')
+        self.fields['speaker'].queryset = Speaker.objects.order_by('name')
         self.applyStyle()
 
 class CategoryModelForm(StyleFormMixin, forms.ModelForm):
