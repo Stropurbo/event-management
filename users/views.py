@@ -18,6 +18,8 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 from django.views.generic.edit import FormView
 from users.models import CustomUser
 from django.contrib.auth import get_user_model
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 User = get_user_model()
 
@@ -59,16 +61,21 @@ class SignupView(FormView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data.get('password'))
-        user.is_active = False
+        user.is_active = False        
         user.save()
         
         messages.success(self.request, "Confirmation mail sent. Please check you e-mail.")
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        print(form.errors)
-        messages.error(self.request, "Invalid form submission. Please check the details.")
+        errors = form.errors.as_data()  
+        error_messages = []
+        for field, error_list in errors.items():
+            for error in error_list:
+                error_messages.append(error.message)    
+        messages.error(self.request, " ".join(error_messages))
         return super().form_invalid(form)
+
 
 
 def login_view(request): 
