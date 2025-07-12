@@ -6,6 +6,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from users.models import CustomUser
 from django.contrib.auth import get_user_model
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 User = get_user_model()
 
@@ -13,7 +15,10 @@ User = get_user_model()
 def send_activation_mail(sender, instance, created, **kwargs):
     if created:
         token = default_token_generator.make_token(instance)
-        activation_url = f"{settings.FRONTEND_URL}/users/activate/{instance.id}/{token}/"
+        # activation_url = f"{settings.FRONTEND_URL}/users/activate/{instance.id}/{token}/"
+
+        uid = urlsafe_base64_encode(force_bytes(instance.pk))
+        activation_url = f"{settings.FRONTEND_URL}/users/activate/{uid}/{token}/"
 
         subject = "Activate Your Account"
         message = f'Hi {instance.username}, \n\nPlease activate your account by click this link below:\n\n{activation_url}\n\nThank You!'
@@ -35,3 +40,4 @@ def assign_role(sender, instance, created, **kwargs):
 # def create_or_update_profile(sender, instance, created, **kwargs):
 #     if not hasattr(instance, 'userprofile'):
 #             CustomUser.objects.create(user=instance) 
+    # path('activate/<int:user_id>/<str:token>/', ActivateUser.as_view(), name='activate_user'),

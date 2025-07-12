@@ -136,7 +136,9 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 SITE_DOMAIN = config("SITE_DOMAIN", default="127.0.0.1:8000")
 SITE_PROTOCOL = config("SITE_PROTOCOL", default="http")
-FRONTEND_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}"
+# FRONTEND_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}"
+FRONTEND_URL = "https://event-management-c8i3.onrender.com"
+
 
 
 LOGIN_URL = 'login'

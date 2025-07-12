@@ -18,9 +18,25 @@
 	</div>
 
 	<div class="flex justify-center items-center">
+		
+		<!-- ✅ Move error display block ABOVE the form tag -->
+		{% if form.errors %}
+			<div class="mb-4 text-red-500 text-sm text-center">
+				{% for field in form %}
+					{% for error in field.errors %}
+						<div>{{ field.label }}: {{ error }}</div>
+					{% endfor %}
+				{% endfor %}
+				{% for error in form.non_field_errors %}
+					<div>{{ error }}</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+		
 		<form
 			action=""
 			method="POST"
+			
 		>
 			{% csrf_token %} 			
 
