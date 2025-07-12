@@ -19,19 +19,19 @@ class StyleFormMixin:
             if isinstance(field.widget, forms.TextInput):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f'Enter {label_lower}',
+                    'placeholder' : f'{label_lower}',
                     'style' : self.default_style
                 })
             elif isinstance(field.widget, forms.EmailInput):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f'Enter {label_lower}',
+                    'placeholder' : f'{label_lower}',
                     'style' : self.default_style
                 })
             elif isinstance(field.widget, forms.EmailField):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f'Enter {label_lower}',
+                    'placeholder' : f'{label_lower}',
                     'style' : self.default_style
                 })
             elif isinstance(field.widget, forms.PasswordInput):
@@ -43,13 +43,13 @@ class StyleFormMixin:
             elif isinstance(field.widget, forms.Textarea):
                 field.widget.attrs.update({
                     'class' : self.default_class,
-                    'placeholder' : f"Enter {label_lower}",
+                    'placeholder' : f"{label_lower}",
                     'style': self.default_style
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
                 field.widget.attrs.update({
                     # 'class' : self.default_class,
-                    'placeholder' : f"Enter {label_lower}",
+                    'placeholder' : f"{label_lower}",
                     
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):

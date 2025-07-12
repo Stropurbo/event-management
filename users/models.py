@@ -33,7 +33,7 @@ class CustomUser(AbstractUser):
                 regex=r'^\+?1?\d{9,15}$',  
                 message="Phone number must be entered in the format: '+88'. Up to 11 digits allowed."
             )
-        ]
+        ], blank=True, null=True
     )
 
     def __str__(self):

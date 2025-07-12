@@ -19,7 +19,7 @@ from django.views.generic.edit import FormView
 from users.models import CustomUser
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
-
+from django.utils.encoding import force_str
 
 User = get_user_model()
 
@@ -35,7 +35,7 @@ def is_manager_or_admin(user):
 # create_decorators = [login_required, permission_required("tasks.add_event", login_url="no_permission")]
 
 
-def Signup(request): 
+def Signup(request):
     form = CustomRegisterForm()
     if request.method == "POST":
         form = CustomRegisterForm(request.POST)
@@ -72,11 +72,24 @@ class SignupView(FormView):
         error_messages = []
         for field, error_list in errors.items():
             for error in error_list:
-                error_messages.append(str(error))  
+                error_messages.append(error.message)    
         messages.error(self.request, " ".join(error_messages))
         return super().form_invalid(form)
+    
+class ActivateUser(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
 
-
+        if user is not None and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return redirect('login')  # Redirect to login page after activation
+        else:
+            return HttpResponse("Activation link is invalid or has expired.")
 
 def login_view(request): 
     if request.method == "POST":
@@ -94,33 +107,6 @@ def login_view(request):
 
     return render(request, "login.html")
 
-class ActivateUser(View):   
-    def get(self, request, uidb64, token):
-        try:
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(pk=uid)
-            if default_token_generator.check_token(user, token):
-                user.is_active = True
-                user.save() 
-                return redirect('login')
-            else:
-                return HttpResponse("Invalid Token")
-        except (User.DoesNotExist, ValueError, TypeError, OverflowError):
-            return HttpResponse("User Doesn't Found.")
-
-# class ActivateUser(View):   
-#     def get(self, request, user_id, token):
-#         try:
-#             user = User.objects.get(id = user_id)
-#             if default_token_generator.check_token(user, token):
-#                 user.is_active = True
-#                 user.save() 
-#                 return redirect('login')
-#             else:
-#                 return HttpResponse("Invalid ID")
-            
-#         except User.DoesNotExist:
-#             return HttpResponse("User Doesn't Found.")
 
 def activate_user(request, user_id, token):
     try:

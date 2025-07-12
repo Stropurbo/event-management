@@ -10,7 +10,8 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['event-management-c8i3.onrender.com', 'localhost', '127.0.0.1']
+
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000']
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -138,6 +139,8 @@ SITE_DOMAIN = config("SITE_DOMAIN", default="127.0.0.1:8000")
 SITE_PROTOCOL = config("SITE_PROTOCOL", default="http")
 # FRONTEND_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}"
 FRONTEND_URL = "https://event-management-c8i3.onrender.com"
+BACKEND_URL = "https://event-management-c8i3.onrender.com"
+
 
 
 
