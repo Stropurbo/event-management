@@ -376,12 +376,17 @@ def dashboard(request):
 
 class EventDetailsView(TemplateView):
     template_name = "event_details_view.html"
+    
+    def get(self, request, *args, **kwargs):
+        event = Event.objects.filter(id=self.kwargs['id']).first()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        event = get_object_or_404(Event, id=self.kwargs['id'])
-        context["event"] = event
-        return context
+        if not event:
+            return redirect('home') 
+
+        context = {
+            'event': event
+        }
+        return render(request, self.template_name, context)
     
 
 def event_details_view(request, id):

@@ -78,7 +78,7 @@ class EventModelForm(StyleFormMixin, forms.ModelForm):
             'status' : forms.Select(attrs={'required' : True}),
             # 'asset' : forms.ClearableFileInput(attrs={'required' : True}),
             'participants' : forms.CheckboxSelectMultiple(),
-            'speaker': forms.CheckboxSelectMultiple()
+            'speaker': forms.SelectMultiple()
 
         }
         labels = {

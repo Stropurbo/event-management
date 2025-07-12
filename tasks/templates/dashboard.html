@@ -97,7 +97,7 @@
 								href="{% url 'create-speaker' %}"
 								class="block px-4 py-2 hover:bg-gray-100"
 								>Create</a
-							>							
+							>
 						</div>
 					</div>
 
@@ -359,20 +359,17 @@
 				</div>
 			</div>
 
-			<div class="bg-white w-full p-5 mt-5 rounded-xl">				
-				<h3 class="text-xl font-semibold text-gray-700 mb-4">Speaker</h3>
-				<ol class="list-decimal space-y-4">
+			<div class="bg-white w-full p-5 mt-5 rounded-xl">
+				<h3 class="text-xl font-semibold text-gray-700">Speaker</h3>
+				<ol class="list-decimal">
 					{% for sp in speakers %}
 					<div
-						class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-3"
+						class="flex flex-wrap items-center  flex-col md:flex-row md:items-center"
 					>
 						<div class="mx-5">
-							<li class="font-medium">
-								{{sp.name}}
-							</li>
+							<li class="font-medium">{{sp.name}}</li>
 						</div>
-							<div class="m-2 flex gap-2 flex-wrap">							
-
+						<div class="m-2 flex gap-2 flex-wrap">
 							<form
 								action="{% url 'delete_speaker' sp.id %}"
 								method="POST"
@@ -380,18 +377,16 @@
 								{% csrf_token %}
 								<button
 									type="submit"
-									class="inline-flex items-center justify-center bg-red-500 hover:bg-white text-black text-sm border font-medium px-4 py-2 rounded-lg shadow transition duration-200"
+									class="inline-flex items-center justify-center bg-red-300 hover:bg-white text-black text-sm border font-medium px-4 py-2 rounded-lg shadow transition duration-200"
 								>
 									🗑️ Delete
 								</button>
 							</form>
 						</div>
-						
 					</div>
 					{% endfor %}
-				</ol>				
+				</ol>
 			</div>
-
 		</main>
 		<script src="{% static 'js/script.js' %}"></script>
 	</body>

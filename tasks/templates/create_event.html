@@ -12,37 +12,38 @@
 	>
 		{% csrf_token %}
 
-		<div class="mt-2 mb-2">
+		<div class="mt-2 mb-2 flex flex-col">
 			<label for="">Event Name:</label>
 			{{create_event.name}}
 		</div>
 
-		<div class="mt-2 mb-2">
+		<div class="mt-2 mb-2 flex flex-col">
 			{{create_event.description.label_tag}} {{create_event.description}}
 		</div>
 
 		<div class="mt-2 mb-2">{{create_event.date.label_tag}} {{create_event.date}}</div>
 
-		<div class="mt-2 mb-2">
+		<div class="mt-2 mb-2 flex flex-col">
 			{{create_event.location.label_tag}} {{create_event.location}}
 		</div>
 
-		<div class="mt-2 mb-2">
+		<div class="mt-2 mb-2 flex flex-col">
 			{{create_event.category.label_tag}} {{create_event.category}}
 		</div>
 
-		<div class="mt-2 mb-2">{{create_event.status.label_tag}} {{create_event.status}}</div>
+		<div class="mt-2 mb-2 flex flex-col">{{create_event.status.label_tag}} {{create_event.status}}</div>
 
-		<div class="mt-2 mb-2">{{create_event.asset.label_tag}} {{create_event.asset}}</div>
+		<div class="mt-2 mb-2 flex flex-col">{{create_event.asset.label_tag}} {{create_event.asset}}</div>
 
-		<div class="mt-2 mb-2">
+		<div class="mt-2 mb-2 flex flex-col">
 			{{create_event.participants.label_tag}} {{create_event.participants}}
 		</div>
 
-		<div class="mt-2 mb-2">{{ create_event.time.label_tag }} {{ create_event.time }}</div>
+		<div class="mt-2 mb-2 flex flex-col">{{ create_event.time.label_tag }} {{ create_event.time }}</div>
 
-		<div class="mt-2 mb-2">
-			{{ create_event.speaker.label_tag }} {{ create_event.speaker }}
+		<div class="mt-2 mb-2 gap-2">
+			{{ create_event.speaker.label_tag }} 
+			{{ create_event.speaker }}
 		</div>
 
 		<button
