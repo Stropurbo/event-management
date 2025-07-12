@@ -427,6 +427,8 @@ def rsvp_event(request, event_id):
 
 class AboutEventPage(TemplateView):
     template_name = "about.html"
+class PrivacyPolicyView(TemplateView):
+    template_name = "privacy_policy.html"
 
 class AllEventView(ListView):
     model = Event

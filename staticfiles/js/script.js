@@ -20,9 +20,19 @@ document.addEventListener('DOMContentLoaded', function () {
 	})
 })
 
-document.getElementById('menu-toggle').addEventListener('click', function () {
-	document.getElementById('menu').classList.toggle('hidden')
+document.addEventListener('DOMContentLoaded', function () {
+	const menuToggle = document.getElementById('menu-toggle')
+	const menu = document.getElementById('menu')
+
+	if (menuToggle && menu) {
+		menuToggle.addEventListener('click', function () {
+			menu.classList.toggle('hidden')
+		})
+	} else {
+		console.warn('menu-toggle or menu not found in the DOM.')
+	}
 })
+
 
 setTimeout(function () {
 	var alert = document.querySelector('.alert-container')
@@ -32,9 +42,9 @@ setTimeout(function () {
 }, 2000)
 
 // ata user icon a click korle logout r dashboard show hobe
-document.getElementById('menu-toggle').addEventListener('click', function () {
-	document.getElementById('mobile-menu').classList.toggle('hidden')
-})
+// document.getElementById('menu-toggle').addEventListener('click', function () {
+// 	document.getElementById('mobile-menu').classList.toggle('hidden')
+// })
 
 // document.getElementById('user-menu-button').addEventListener('click', function () {
 // 	document.getElementById('user-menu').classList.toggle('hidden')
@@ -61,15 +71,47 @@ window.addEventListener('click', function (e) {
 })
 
 // ata category er jonno
-document.getElementById('category-text').addEventListener('click', function () {
-	document.getElementById('cat-list').classList.toggle('hidden')
-})
+document.addEventListener('DOMContentLoaded', function () {
+	const categoryText = document.getElementById('category-text')
+	const catList = document.getElementById('cat-list')
 
+	if (categoryText && catList) {
+		categoryText.addEventListener('click', function () {
+			catList.classList.toggle('hidden')
+		})
+	} else {
+		console.warn('category-text or cat-list not found in DOM')
+	}
+})
 window.addEventListener('click', function (e) {
 	if (!document.getElementById('category-text').contains(e.target)) {
 		document.getElementById('cat-list').classList.add('hidden')
 	}
 })
+
+// speaker 
+document.addEventListener('DOMContentLoaded', function () {
+	const speakerButton = document.getElementById('speakerButton')
+	const speakerDropdown = document.getElementById('spctordel')
+
+	// Toggle on button click
+	speakerButton.addEventListener('click', function (e) {
+		e.stopPropagation() // Prevent click from bubbling to window
+		speakerDropdown.classList.toggle('hidden')
+	})
+
+	// Hide when clicking outside
+	window.addEventListener('click', function (e) {
+		if (!speakerButton.contains(e.target) && !speakerDropdown.contains(e.target)) {
+			speakerDropdown.classList.add('hidden')
+		}
+	})
+})
+
+
+
+  
+
 
 /////////////
 
