@@ -13,7 +13,7 @@ DEBUG = True
 # ALLOWED_HOSTS = ['event-management-c8i3.onrender.com', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000', 'https://event-management-eight-rho.vercel.app/']
 
 AUTH_USER_MODEL = 'users.CustomUser'
 # Application definition
@@ -138,9 +138,10 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 SITE_DOMAIN = config("SITE_DOMAIN", default="127.0.0.1:8000")
 SITE_PROTOCOL = config("SITE_PROTOCOL", default="http")
-# FRONTEND_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}"
-FRONTEND_URL = "https://event-management-c8i3.onrender.com"
-BACKEND_URL = "https://event-management-c8i3.onrender.com"
+FRONTEND_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}"
+BACKEND_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}"
+# FRONTEND_URL = "https://event-management-c8i3.onrender.com"
+# BACKEND_URL = "https://event-management-c8i3.onrender.com"
 
 
 
