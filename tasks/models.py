@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from users.models import CustomUser
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -21,7 +22,7 @@ class Speaker(models.Model):
 class Event(models.Model):    
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    date = models.DateField(db_index=True)
+    date = models.DateField(db_index=True, default=timezone.now)
     time = models.TimeField()
     location = models.CharField(max_length=250)
     email = models.EmailField(unique=True, blank=True, null=True)

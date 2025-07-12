@@ -117,7 +117,8 @@
 			<div class="flex justify-between items-center mt-4 text-sm text-gray-700 font-sans">
 				<span>Category: <strong>{{ ev.category.name }}</strong></span>
 				<span>Joined: <strong>{{ ev.participants.count }}</strong></span>
-			</div>
+			</div>	
+
 			<form
 				method="POST"
 				action="{% url 'rsvp_event' ev.id %}"
@@ -127,7 +128,7 @@
 				<button
 					class="bg-red-500 text-white w-full font-mono font-bold rounded py-2 hover:bg-gray-600 transition duration-300"
 				>
-					RSVP
+					Join
 				</button>
 			</form>
 		</div>
@@ -137,13 +138,16 @@
 	</div>
 
 	<!-- See All Events -->
-	<div class="flex justify-center p-5">
+	<a
+		href="{% url 'all_events' %}"
+		class="flex justify-center p-5"
+	>
 		<button
 			class="px-4 h-10 rounded-lg font-bold bg-red-500 text-white hover:bg-gray-500 font-mono"
 		>
 			SEE ALL EVENTS
 		</button>
-	</div>
+	</a>
 
 	<!-- Features Section -->
 	<div
@@ -299,6 +303,119 @@
 			{% empty %}
 			<p class="text-center w-full text-gray-500">No speakers found.</p>
 			{% endfor %}
+		</div>
+	</section>
+
+	<!-- Stats -->
+	<section class="py-10 bg-white">
+		<div class="flex justify-around text-center">
+			<div>
+				<h3 class="text-3xl font-bold text-red-500">300+</h3>
+				<p class="text-gray-600">Events Hosted</p>
+			</div>
+			<div>
+				<h3 class="text-3xl font-bold text-red-500">5000+</h3>
+				<p class="text-gray-600">Participants</p>
+			</div>
+			<div>
+				<h3 class="text-3xl font-bold text-red-500">200+</h3>
+				<p class="text-gray-600">Speakers</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Newsletter -->
+	<section class="py-10 text-black text-center bg-white">
+		<h2 class="text-2xl font-bold">📬 Stay Updated!</h2>
+		<p class="mb-4">Subscribe to get updates about new events</p>
+		<form
+			method="POST"
+			class="flex justify-center gap-2 max-w-lg mx-auto"
+		>
+			{% csrf_token %}
+			<input
+				type="email"
+				name="email"
+				placeholder="Your email"
+				class="p-2 rounded text-black w-2/3"
+				required
+			/>
+			<button
+				type="submit"
+				class="bg-black text-white px-4 py-2 rounded"
+			>
+				Subscribe
+			</button>
+		</form>
+	</section>
+
+	<!-- FAQ -->
+	<section class="py-10 px-6 bg-gray-50">
+		<h2 class="text-2xl font-bold text-center text-gray-800 mb-8">
+			❓ Frequently Asked Questions
+		</h2>
+		<div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">How do I join an event?</summary>
+				<p class="mt-2 text-gray-600">
+					Click the “Join” button on any event card after logging in.
+				</p>
+			</details>
+
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">Can I create my own event?</summary>
+				<p class="mt-2 text-gray-600">
+					Yes, registered organizers can create events from their dashboard.
+				</p>
+			</details>
+
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">Is there any fee to join an event?</summary>
+				<p class="mt-2 text-gray-600">
+					Most events are free, but some may have ticket prices mentioned in the event
+					details.
+				</p>
+			</details>
+
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">How can I cancel my Join?</summary>
+				<p class="mt-2 text-gray-600">
+					Go to your dashboard and find the event you joined. Click “Cancel RSVP” to
+					withdraw.
+				</p>
+			</details>
+
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">
+					Can I edit or delete my event after posting?
+				</summary>
+				<p class="mt-2 text-gray-600">
+					Yes, go to your organizer dashboard to manage your events. You can edit or
+					delete them anytime.
+				</p>
+			</details>
+
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">How can I become a speaker?</summary>
+				<p class="mt-2 text-gray-600">
+					Contact through our e-mail or contact the event organizer directly.
+				</p>
+			</details>
+
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">Can I see who else joined the event?</summary>
+				<p class="mt-2 text-gray-600">
+					Some events show participant lists on the detail page depending on the
+					organizer’s settings.
+				</p>
+			</details>
+
+			<details class="bg-white p-4 rounded shadow cursor-pointer">
+				<summary class="font-semibold">What if I forgot my account password?</summary>
+				<p class="mt-2 text-gray-600">
+					Click on “Forgot Password” from the login page to reset it via email.
+				</p>
+			</details>
 		</div>
 	</section>
 
