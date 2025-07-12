@@ -33,8 +33,9 @@ class CustomUser(AbstractUser):
 
     profile_image = models.ImageField(
         upload_to="profile_images",
-        default="default.png",
-        blank=True
+        default='profile_images/default.png',
+        blank=True,
+        null=True
     )
     phone_number = models.CharField(
         max_length=11,
