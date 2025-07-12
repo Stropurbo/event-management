@@ -13,7 +13,7 @@ DEBUG = True
 # ALLOWED_HOSTS = ['event-management-c8i3.onrender.com', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000', 'https://event-management-eight-rho.vercel.app/']
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com' , 'http://127.0.0.1:8000', 'https://*.vercel.app/']
 
 AUTH_USER_MODEL = 'users.CustomUser'
 # Application definition
