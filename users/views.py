@@ -20,8 +20,13 @@ from users.models import CustomUser
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.urls import reverse
 User = get_user_model()
+from django.template.loader import render_to_string
 
 def is_manager(user):
     return "Manager" in [group.name for group in user.groups.all()]
@@ -63,19 +68,31 @@ class SignupView(FormView):
         user.set_password(form.cleaned_data.get('password'))
         user.is_active = False        
         user.save()
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+
+        activation_link = self.request.build_absolute_uri(
+            reverse('activate', kwargs={'uidb64': uid, 'token': token})
+        )
+        
+        send_mail(
+            subject="Activate your account",
+            message=f"Hi {user.username}, click the link below to activate your account:\n{activation_link}",
+            from_email="noreply@example.com",
+            recipient_list=[user.email],
+        )        
         
         messages.success(self.request, "Confirmation mail sent. Please check you e-mail.")
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        errors = form.errors.as_data()  
-        error_messages = []
-        for field, error_list in errors.items():
-            for error in error_list:
-                error_messages.append(error.message)    
-        messages.error(self.request, " ".join(error_messages))
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"{field}: {error}")
         return super().form_invalid(form)
-    
+
+
 class ActivateUser(View):
     def get(self, request, uidb64, token):
         try:
@@ -87,7 +104,7 @@ class ActivateUser(View):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            return redirect('login')  # Redirect to login page after activation
+            return redirect('login')  
         else:
             return HttpResponse("Activation link is invalid or has expired.")
 
