@@ -66,7 +66,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'event_management.wsgi.app'
+WSGI_APPLICATION = 'event_management.wsgi.application'
 
 DATABASES = {
     'default': {
