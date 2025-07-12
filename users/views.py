@@ -18,6 +18,8 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 from django.views.generic.edit import FormView
 from users.models import CustomUser
 from django.contrib.auth import get_user_model
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str 
 
 User = get_user_model()
 
@@ -61,7 +63,7 @@ class SignupView(FormView):
         user.set_password(form.cleaned_data.get('password'))
         user.is_active = False
         user.save()
-        
+
         messages.success(self.request, "Confirmation mail sent. Please check you e-mail.")
         return super().form_valid(form)
     
@@ -88,18 +90,20 @@ def login_view(request):
     return render(request, "login.html")
 
 class ActivateUser(View):   
-    def get(self, request, user_id, token):
+    def get(self, request, uidb64, token):
         try:
-            user = User.objects.get(id = user_id)
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+
             if default_token_generator.check_token(user, token):
                 user.is_active = True
                 user.save() 
                 return redirect('login')
             else:
-                return HttpResponse("Invalid ID")
+                return HttpResponse("❌ Invalid token.")
             
-        except User.DoesNotExist:
-            return HttpResponse("User Doesn't Found.")
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return HttpResponse("❌ User not found.")
 
 def activate_user(request, user_id, token):
     try:
