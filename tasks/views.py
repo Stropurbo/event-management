@@ -428,10 +428,41 @@ def rsvp_event(request, event_id):
 class AboutEventPage(TemplateView):
     template_name = "about.html"
 
-class AllEventView(TemplateView):
+class AllEventView(ListView):
+    model = Event
     template_name = "event.html"
+    context_object_name = 'all_events_page'
+
+    def get_queryset(self):
+        queryset = Event.objects.all()
+        
+        # Search
+        q = self.request.GET.get('q')
+        if q:
+            queryset = queryset.filter(
+                Q(name__icontains=q) |
+                Q(description__icontains=q) |
+                Q(location__icontains=q)
+            )
+
+        # Filter by category
+        category = self.request.GET.get('category')
+        if category:
+            queryset = queryset.filter(category__name__iexact=category)
+
+        # Sort
+        sort = self.request.GET.get('sort')
+        if sort == 'latest':
+            queryset = queryset.order_by('-date')
+        elif sort == 'oldest':
+            queryset = queryset.order_by('date')
+        elif sort == 'name':
+            queryset = queryset.order_by('name')
+
+        return queryset
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["all_events_page"] = Event.objects.all()
+        context['categories'] = Category.objects.all()
         return context
-    
+
